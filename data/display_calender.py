@@ -26,10 +26,10 @@ def display_cal ():
 
         data_list = re.split(',|\n',data)
 
-        no_ent  =['Event name', 'Start Date', 'Start Time', 'End Date', 'End Time']
+        header  =['Event name', 'Start Date', 'Start Time', 'End Date', 'End Time']
 
-        data = [ elem for elem in data_list if elem not in no_ent]
+        data = [ elem for elem in data_list if elem not in header]
 
 
         data_list2 = list(divide_chunks(data, 5)) 
-        print(tabulate(data_list2, no_ent, tablefmt="fancy_grid"))
+        print(tabulate(data_list2, header, tablefmt="fancy_grid"))

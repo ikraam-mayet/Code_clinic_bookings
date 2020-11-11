@@ -7,6 +7,10 @@ import data.display_calender as display_calender
 data_list = []
 
 def show_events():
+    """
+    This functions calls the display_cal function from display_calender to 
+    display the calender
+    """
     # for event in data_list:
     #     print(f'{event[0]} / {event[1]} - {event[2]} / {event[3]} - {event[4]}')
     display_calender.display_cal()
