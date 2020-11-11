@@ -1,7 +1,7 @@
 import os
 import sys
 import pickle
-from apiclient.discovery import build
+from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 
 def open_create_credits_file(delete_file=False):
