@@ -2,12 +2,14 @@ import csv
 from data.volunteer import create_slot
 from datetime import date, timedelta
 from data.format_data import *
+import data.display_calender as display_calender
 
 data_list = []
 
 def show_events():
-    for event in data_list:
-        print(f'{event[0]} / {event[1]} - {event[2]} / {event[3]} - {event[4]}')
+    # for event in data_list:
+    #     print(f'{event[0]} / {event[1]} - {event[2]} / {event[3]} - {event[4]}')
+    display_calender.display_cal()
 
 def store_next_n_days(n, service_obj):
     global data_list
