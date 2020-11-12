@@ -33,7 +33,7 @@ def store_next_n_days(n, service_obj):
 
     for event in calend['items']:
         if event['status'] != 'cancelled':
-            summary = event['summary']
+            summary = event['summary'] if 'summary' in event else 'Empty Event'
             start_date, start_time, start_iso_time = get_time_date(event['start']['dateTime']) # get an event's start date time
             end_date, end_time, end_iso_time = get_time_date(event['end']['dateTime'])
             
