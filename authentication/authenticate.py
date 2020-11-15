@@ -3,6 +3,7 @@ import sys
 import pickle
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
+import google.oauth2.credentials
 
 def open_create_credits_file(delete_file=False):
     """
@@ -52,14 +53,14 @@ def get_flow():
 
 def authenticate_user(credits_file):
     # Create a service that will interact with the api using the active credentials
-    
-    if type(credits_file) is not dict:
-        raise TypeError("Credits file should be a dictionary in the form of a google client secrets dictionary.")
 
     try:
         my_service = build('calendar', 'v3', credentials=credits_file)
+        return my_service
     except:
         print("Invalid credentials. Creating new ones...")
         credits_file = open_create_credits_file(delete_file=True)
         my_service = build('calendar', 'v3', credentials=credits_file)
-    return my_service
+        return my_service
+    raise TypeError("Credits file should be a Google OAuth2 Credentials object.")
+    exit()

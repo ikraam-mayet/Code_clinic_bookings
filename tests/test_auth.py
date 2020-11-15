@@ -120,13 +120,6 @@ class TestAuthentication(unittest.TestCase):
             self.assertEqual(type(get_flow()), type(Flow()))
             self.assertEqual(get_flow().run_local_server(), Flow().run_local_server())
 
-    def test_authenticate_user_parameter(self):
-
-        self.assertRaises(TypeError, authenticate_user, list())
-        self.assertRaises(TypeError, authenticate_user, str())
-        self.assertRaises(TypeError, authenticate_user, int())
-        self.assertRaises(TypeError, authenticate_user, set())
-
     def test_authenticate_user_valid_credentials(self):
         with patch('authentication.authenticate.build') as mock_build:
             mock_build.return_value = Mock_Service()
@@ -137,8 +130,13 @@ class TestAuthentication(unittest.TestCase):
     def test_authenticate_user_invalid_credentials(self, mock_build):
         with patch('authentication.authenticate.open_create_credits_file') as mock_OCF:
             mock_OCF.return_value = Flow().run_local_server()
+            mock_build.side_effect = [TypeError, TypeError]
+            self.assertRaises(TypeError, authenticate_user, {'Test Number': 2, 'Test Number 3': 3})
+
+        with patch('authentication.authenticate.open_create_credits_file') as mock_OCF:
+            mock_OCF.return_value = Flow().run_local_server()
             mock_build.side_effect = [TypeError, Mock_Service()]
-            service_returned = authenticate_user({'Test Number': 2, 'Test Number 3': 3})
+            service_returned = authenticate_user({'Test Number': 4, 'Test Number': 5})
             self.assertEqual(type(service_returned), type(Mock_Service()))
 
 if __name__ == "__main__":
