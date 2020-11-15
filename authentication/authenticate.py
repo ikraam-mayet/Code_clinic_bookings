@@ -8,6 +8,8 @@ def open_create_credits_file(delete_file=False):
     """
     Open the user's config file and return the active credits token.
     """
+    if type(delete_file) is not bool:
+        raise TypeError("Delete file should be a boolean.")
 
     user_home = os.path.expanduser('~') # String that holds user's home dir
 
@@ -18,6 +20,7 @@ def open_create_credits_file(delete_file=False):
         print('Authenticating...')
         credits_file = open(f"{user_home}/.credentials.pkl", "rb")
         if os.path.getsize(f"{user_home}/.credentials.pkl") == 0:
+            credits_file.close()
             raise FileNotFoundError # if file is empty force an exception to be raised
         active_credits = pickle.load(credits_file)
         credits_file.close()
@@ -33,6 +36,7 @@ def open_create_credits_file(delete_file=False):
             return active_credits
         # Assume user denied access if the previous try block failed. Exit the app.
         except:
+            credits_file.close()
             print('Authentication failed. Please give the app permission to your calendar or try again in 5 minutes.')
             exit()
     
@@ -41,14 +45,21 @@ def get_flow():
     scopes = ['https://www.googleapis.com/auth/calendar']
 
     # ??
-    flow = InstalledAppFlow.from_client_secrets_file("client_secret.json", scopes=scopes)
+    user_home = os.path.expanduser('~')
+
+    flow = InstalledAppFlow.from_client_secrets_file(f"{user_home}/Downloads/client_secret.json", scopes=scopes)
     return flow
 
 def authenticate_user(credits_file):
     # Create a service that will interact with the api using the active credentials
+    
+    if type(credits_file) is not dict:
+        raise TypeError("Credits file should be a dictionary in the form of a google client secrets dictionary.")
+
     try:
         my_service = build('calendar', 'v3', credentials=credits_file)
     except:
         print("Invalid credentials. Creating new ones...")
         credits_file = open_create_credits_file(delete_file=True)
+        my_service = build('calendar', 'v3', credentials=credits_file)
     return my_service
