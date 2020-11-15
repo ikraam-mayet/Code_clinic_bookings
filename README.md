@@ -5,7 +5,9 @@ It can also download data from the current day and n days into the future (n bei
 
 ### How to use
 
-- Download the repo and run 'python3 app.py' in your console to start the application.
+- Download the repo
+- Run 'pip3 install -r requirements.txt' to pip install all the required packages
+- Run 'python3 app.py' in your console to start the application.
 - When prompted, enter a number of days into the future you would like data for (0 will give you the current day's data).
 - The app will attempt to authenticate you. A new browser window will open and ask you to give permission to the app.
 - Once given the permission, the app will show you all the events for the number of days specified earlier.
