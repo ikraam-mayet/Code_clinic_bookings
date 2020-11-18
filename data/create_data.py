@@ -31,9 +31,12 @@ def store_next_n_days(n, service_obj):
     data_list = []
     data_list, booked_slots = add_data(calend, data_list, booked_slots)
 
-    # add the calendar's events in the time period
-    calend = service_obj.events().list(calendarId='group2codeclinic@gmail.com', timeMin=current_date, timeMax=end_date, singleEvents=True, orderBy='startTime').execute()
-    data_list, booked_slots = add_data(calend, data_list, booked_slots)
+    # add the calendar's events in the time period if the calendar is connected to the user's account
+    try:
+        calend = service_obj.events().list(calendarId='group2codeclinic@gmail.com', timeMin=current_date, timeMax=end_date, singleEvents=True, orderBy='startTime').execute()
+        data_list, booked_slots = add_data(calend, data_list, booked_slots)
+    except:
+        pass
 
     data_list.sort(key=lambda x: x[5]) # sort all events from both calendars by start time
     write_to_csv(header_list, data_list)
