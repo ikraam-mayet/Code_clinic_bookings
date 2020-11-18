@@ -29,7 +29,7 @@ def open_create_credits_file(delete_file=False):
     except FileNotFoundError:
         # Should the file be missing, create new credentials
         try:
-            print('File missing/empty. Creating new credentials...')
+            print('File missing/empty.\nCreating new credentials...')
             credits_file = open(f"{user_home}/.credentials.pkl", "wb")
             active_credits = get_flow().run_local_server(authorization_prompt_message='Please authenticate the app. Opening browser...')
             pickle.dump(active_credits, credits_file)

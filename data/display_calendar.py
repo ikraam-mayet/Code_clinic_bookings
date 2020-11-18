@@ -26,7 +26,7 @@ def display_cal(src_fn):
 
         data_list = re.split(',|\n',data)
 
-        header  =['Event name', 'Start Date', 'Start Time', 'End Date', 'End Time']
+        header =['Event name', 'Start Date', 'Start Time', 'End Date', 'End Time']
 
         data = [ elem for elem in data_list if elem not in header]
 

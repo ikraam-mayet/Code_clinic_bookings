@@ -12,10 +12,10 @@ import app
 class test_app(unittest.TestCase):
 
 
-    def test_viewing_of_calendar(self):
+    def test_user_viewing_of_calendar(self):
         src_fn= 'tests/test_event.csv'
         self.maxDiff = None
-        result = app.viewing_of_calendar(src_fn)
+        result = app.user_viewing_of_calendar(src_fn)
         self.assertEqual(result,"""╒══════════════╤══════════════╤══════════════╤════════════╤════════════╕
 │ Event name   │ Start Date   │ Start Time   │ End Date   │ End Time   │
 ╞══════════════╪══════════════╪══════════════╪════════════╪════════════╡
