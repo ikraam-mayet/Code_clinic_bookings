@@ -10,6 +10,11 @@ booked_slots = dict() # the booked slots, stored as {'Day 1': [[start time 1, en
 days_to_store = ''
 
 
+def store_days():
+    global days_to_store
+    days_to_store = input("Please enter an integer for the number of days to store. \n0 will store today only, negative integers will store nothing: ")
+
+
 def user_viewing_of_calendar(src_fn):
     try:
         return display_calendar.display_cal(src_fn)
@@ -92,11 +97,11 @@ def main_function():
     global booked_slots, days_to_store
 
     if sys.argv[1] == 'view_calendar':
-        days_to_store = input("Please enter an integer for the number of days to store. \n0 will store today only, negative integers will store nothing: ")
+        store_days()
         user_viewing_of_calendar('events.csv')
 
     elif sys.argv[1] == 'patient':
-        days_to_store = input("Please enter an integer for the number of days to store. \n0 will store today only, negative integers will store nothing: ")
+        store_days()
         patient_booking()
 
     elif sys.argv[1] == 'authenticate':
