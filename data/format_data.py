@@ -15,4 +15,4 @@ def get_time_date(long_format_time):
     date_str = date_object.strftime(f'%d {months[date_object.month]} %Y')
     time_str = str(date_object.time())
 
-    return date_str, time_str[:5], date_object.time()
+    return date_str, time_str[:5], date_object
