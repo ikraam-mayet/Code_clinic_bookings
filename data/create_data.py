@@ -22,7 +22,7 @@ def store_next_n_days(n, service_obj):
     current_date = str(date.today()) + 'T00:00:00.000Z'
     end_date = str(date.today() + timedelta(days=int(n))) + 'T23:59:00.000Z'
 
-    # get the calendar's events in the given period, sorted by start time (ascending), recurring events repeated as they happen
+    # get the user calendar's events in the given period, sorted by start time (ascending), recurring events repeated as they happen
     calend = service_obj.events().list(calendarId='primary', timeMin=current_date, timeMax=end_date, singleEvents=True, orderBy='startTime').execute()
 
     # store data into memory in lists. Each list uses the format below
@@ -31,16 +31,17 @@ def store_next_n_days(n, service_obj):
     data_list = []
     data_list, booked_slots = add_data(calend, data_list, booked_slots)
 
+    # add the calendar's events in the time period
     calend = service_obj.events().list(calendarId='group2codeclinic@gmail.com', timeMin=current_date, timeMax=end_date, singleEvents=True, orderBy='startTime').execute()
     data_list, booked_slots = add_data(calend, data_list, booked_slots)
 
-    data_list.sort(key=lambda x: x[5])
+    data_list.sort(key=lambda x: x[5]) # sort all events from both calendars by start time
     write_to_csv(header_list, data_list)
 
     return booked_slots
 
 def add_data(calendar_events_dict, data_list, booked_slots):
-
+    # add event data into booked slots and data list
     for event in calendar_events_dict['items']:
         if event['status'] != 'cancelled':
             summary = event['summary'] if 'summary' in event else 'Empty Event'
@@ -58,7 +59,7 @@ def add_data(calendar_events_dict, data_list, booked_slots):
     return data_list, booked_slots
 
 def write_to_csv(header_list, data_list):
-    # move data from memory to a csv file
+    # move data from data_list to a csv file
     with open('events.csv', 'w', newline='') as csv_file:
         writer_obj = csv.writer(csv_file)
 
