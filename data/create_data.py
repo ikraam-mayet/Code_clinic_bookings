@@ -11,9 +11,7 @@ def show_events():
     This functions calls the display_cal function from display_calender to 
     display the calender
     """
-    # for event in data_list:
-    #     print(f'{event[0]} / {event[1]} - {event[2]} / {event[3]} - {event[4]}')
-    return display_calender.display_cal('events.csv')
+    display_calender.display_cal()
 
 def store_next_n_days(n, service_obj):
     global data_list
