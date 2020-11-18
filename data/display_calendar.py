@@ -2,6 +2,7 @@ import re
 from tabulate import tabulate
 
 
+
 def divide_chunks(l, n): 
         """
         param:
@@ -11,17 +12,16 @@ def divide_chunks(l, n):
         This function takes the list and sees in what chuncks you want the list 
         to be broken up into another list
         """
-        for i in range(0, len(l), n):
-                yield l[i:i + n] 
+        return [l[i:i + n] for i in range(0, len(l), n)]
 
 
-def display_cal ():
+def display_cal(src_fn):
         """
         This function reads the events .csv file. It then puts the information 
         in a list, seperating the list into the different events. It uses tabulate 
         to convert the list into a table.
         """
-        with open('events.csv') as f:
+        with open(src_fn) as f:
                 data = f.read()
 
         data_list = re.split(',|\n',data)
@@ -30,6 +30,8 @@ def display_cal ():
 
         data = [ elem for elem in data_list if elem not in header]
 
+        data_list2 = divide_chunks(data, 5)
 
-        data_list2 = list(divide_chunks(data, 5)) 
-        print(tabulate(data_list2, header, tablefmt="fancy_grid"))
+        return (tabulate(data_list2, header, tablefmt="fancy_grid"))
+
+

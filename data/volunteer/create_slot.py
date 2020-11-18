@@ -9,8 +9,19 @@ def volunteer_slot(booked_slots, days_stored):
     Otherwise create an event in that slot.
     """
 
-    date_ = input('Please enter a date i.e 07 November 2020: ').split()
+    while True:
+        try :
+            date_ = input('Please enter a date i.e 07 November 2020: ').split()
+        except KeyError:
+            continue
+        if len(date_) != 3:
+            continue
+        else:
+            break
+
+
     time_ = input('Please enter a time i.e 11:30: ')
+
 
     year, month, day = int(date_[2]), datetime.strptime(date_[1], '%B').month, int(date_[0])
     start_date = datetime(year, month, day, hour=int(time_.split(':')[0]), minute=int(time_.split(':')[1]))
