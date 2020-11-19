@@ -30,16 +30,19 @@ def store_next_n_days(n, service_obj):
     
     data_list = []
     data_list, booked_slots = add_data(calend, data_list, booked_slots)
+    write_to_csv(header_list, data_list, 'events.csv')
 
-    # add the calendar's events in the time period if the calendar is connected to the user's account
+    # add the code clinic calendar's events in the time period if the calendar is connected to the user's account
     try:
+        data_list.clear()
         calend = service_obj.events().list(calendarId='group2codeclinic@gmail.com', timeMin=current_date, timeMax=end_date, singleEvents=True, orderBy='startTime').execute()
         data_list, booked_slots = add_data(calend, data_list, booked_slots)
+        write_to_csv(header_list, data_list, 'calendar_events.csv')
     except:
         pass
 
-    data_list.sort(key=lambda x: x[5]) # sort all events from both calendars by start time
-    write_to_csv(header_list, data_list)
+    # data_list.sort(key=lambda x: x[5]) # sort all events from both calendars by start time
+    # write_to_csv(header_list, data_list, 'events.csv')
 
     return booked_slots
 
@@ -61,9 +64,9 @@ def add_data(calendar_events_dict, data_list, booked_slots):
     
     return data_list, booked_slots
 
-def write_to_csv(header_list, data_list):
+def write_to_csv(header_list, data_list, file_name):
     # move data from data_list to a csv file
-    with open('events.csv', 'w', newline='') as csv_file:
+    with open(file_name, 'w', newline='') as csv_file:
         writer_obj = csv.writer(csv_file)
 
         writer_obj.writerow(header_list)
