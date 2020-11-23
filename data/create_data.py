@@ -34,14 +34,34 @@ def store_next_n_days(n, service_obj):
     data_list, booked_slots = add_data(calend, data_list, booked_slots)
     write_to_csv(header_list, data_list, 'events.csv')
 
-    # add the code clinic calendar's events in the time period if the calendar is connected to the user's account
-    try:
-        data_list.clear()
-        calend = service_obj.events().list(calendarId='group2codeclinic@gmail.com', timeMin=current_date, timeMax=end_date, singleEvents=True, orderBy='startTime').execute()
-        data_list, booked_slots = add_data(calend, data_list, booked_slots)
-        write_to_csv(header_list, data_list, 'calendar_events.csv')
-    except:
-        pass
+    # # add the code clinic calendar's events in the time period if the calendar is connected to the user's account
+    # try:
+    #     data_list.clear()
+    #     calend = service_obj.events().list(calendarId='group2codeclinic@gmail.com', timeMin=current_date, timeMax=end_date, singleEvents=True, orderBy='startTime').execute()
+    #     data_list, booked_slots = add_data(calend, data_list, booked_slots)
+    #     write_to_csv(header_list, data_list, 'calendar_events.csv')
+    # except:
+    #     pass
+
+    return booked_slots
+
+
+def get_clinics_cal(days_to_store, service_obj):
+    global data_list
+
+    booked_slots = dict()
+
+    # store data into memory in lists. Each list uses the format below
+    header_list = ['Event name', 'Start Date', 'Start Time', 'End Date', 'End Time']
+
+    # set current and end date to be downloaded, use n as the difference between today and the end date
+    current_date = str(date.today()) + 'T00:00:00.000Z'
+    end_date = str(date.today() + timedelta(days=int(days_to_store))) + 'T23:59:00.000Z'
+
+    data_list.clear()
+    calend = service_obj.events().list(calendarId='group2codeclinic@gmail.com', timeMin=current_date, timeMax=end_date, singleEvents=True, orderBy='startTime').execute()
+    data_list, booked_slots = add_data(calend, data_list, booked_slots)
+    write_to_csv(header_list, data_list, 'calendar_events.csv')
 
     return booked_slots
 

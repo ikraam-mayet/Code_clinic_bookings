@@ -24,7 +24,19 @@ def user_viewing_of_calendar(src_fn):
         service_obj = authenticate.authenticate_user(credits_file)
         booked_slots = create_data.store_next_n_days(int(days_to_store), service_obj) # first arg is the number of days not including today to add to the data.
                                                                                       # 0 returns today only, a negative returns no days
-        return print(display_calendar.display_cal(src_fn))
+        return display_calendar.display_cal(src_fn)
+
+
+def clinic_calendar(src_fn):
+    try:
+        return display_calendar.display_cal(src_fn)
+
+    except FileNotFoundError:
+        credits_file = authenticate.open_create_credits_file()
+        service_obj = authenticate.authenticate_user(credits_file)
+        booked_slots = create_data.get_clinics_cal(int(days_to_store), service_obj) # first arg is the number of days not including today to add to the data.
+                                                                                      # 0 returns today only, a negative returns no days
+        return display_calendar.display_cal(src_fn)
 
 
 def patient_booking():
@@ -35,7 +47,7 @@ def patient_booking():
     booked_slots = create_data.store_next_n_days(int(days_to_store), service_obj) # first arg is the number of days not including today to add to the data.
                                                                                   # 0 returns today only, a negative returns no days
     booked_slots = create_data.book_event(service_obj, int(days_to_store), booked_slots)
-    user_viewing_of_calendar('events.csv')
+    
 
 
 def volunteer():
@@ -45,10 +57,6 @@ def volunteer():
 def authentication():
     credits_file = authenticate.open_create_credits_file()
     service_obj = authenticate.authenticate_user(credits_file)
-
-
-def clinic_calendar():
-    pass
 
 
 def patient_cancellation():
@@ -93,22 +101,31 @@ Cancelation:
 """
 
 
+def delete_events(src_file):
+    os.remove(src_file)
+
+
 def main_function():
     global booked_slots, days_to_store
 
     if sys.argv[1] == 'view_calendar':
         store_days()
-        user_viewing_of_calendar('events.csv')
+        print(user_viewing_of_calendar('events.csv'))
+        delete_events('events.csv')
+
+    elif sys.argv[1] =='clinic_calendar':
+        store_days()
+        print(clinic_calendar('calendar_events.csv'))
+        delete_events('calendar_events.csv')
 
     elif sys.argv[1] == 'patient':
         store_days()
         patient_booking()
+        print(user_viewing_of_calendar('events.csv'))
+        delete_events('events.csv')
 
     elif sys.argv[1] == 'authenticate':
         authentication()
-
-    elif sys.argv[1] =='clinic_calendar':
-        clinic_calendar()
 
     elif sys.argv[1] == 'volunteer':
         volunteer()
@@ -127,4 +144,4 @@ def main_function():
 
 
 if __name__ == "__main__":
-    main_function()
+    main_function()  
