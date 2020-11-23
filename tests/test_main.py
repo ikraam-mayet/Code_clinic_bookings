@@ -16,8 +16,7 @@ import re
 from tabulate import tabulate
 
 
-
-class TestAcceptance(unittest.TestCase):
+class test_acceptance(unittest.TestCase):
 
     
     def test_unittest_app_exist(self):
@@ -47,7 +46,7 @@ class TestAcceptance(unittest.TestCase):
         self.assertTrue('test_display' in sys.modules, "test_display module should be found")
 
 
-    def test_unittest_succeeds(self):
+    def test_unittest_display_succeeds(self):
         import tests.test_display
         test_result = run_unittests("test_display")
         self.assertTrue(test_result.wasSuccessful(), "unit tests should succeed")

@@ -38,7 +38,7 @@ def open_create_credits_file(delete_file=False):
         # Assume user denied access if the previous try block failed. Exit the app.
         except:
             credits_file.close()
-            print('Authentication failed. Please give the app permission to your calendar or try again in 5 minutes.')
+            print('Authentication failed.\nPlease check if their is a client_secret.json file in the home directory.\nPlease give the app permission to your calendar or try again in 5 minutes.')
             exit()
     
 def get_flow():
