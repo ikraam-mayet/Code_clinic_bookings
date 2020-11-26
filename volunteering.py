@@ -59,6 +59,9 @@ def volunteer(start_time):
                 'dateTime': (start_time + max_time * (i+1)).strftime("%Y-%m-%dT%H:%M:%S"), 
                 'timeZone': timezone,
             },
+            'attendees' : {
+                {'email' : 'group2codeclinic@gmail.com'}
+            },
             'reminders': {
                 'useDefault': False,
                 'overrides': [
