@@ -40,12 +40,12 @@ def check_available_slots(booked_slots, days_stored):
     
 
 def volunteer(start_time):
-    summary = input("Event Details: ")
-    description = input("Event Description: ")
+    summary = input("Username: ")
+    description = input("What topic do you want to volunteer for: ")
     timezone = 'Africa/Johannesburg'
     max_time = timedelta(minutes=30)
-
     event_slots = list()
+
 
     for i in range(3):
         event = {

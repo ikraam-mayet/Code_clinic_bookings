@@ -2,6 +2,7 @@ import csv
 from authentication import authenticate
 from data import create_data
 from data import display_calendar
+from data.volunteer import making_a_slot
 import os
 import sys
 
@@ -40,18 +41,18 @@ def clinic_calendar(src_fn):
 
 
 def patient_booking():
-    global booked_slots, days_to_store
-
-    credits_file = authenticate.open_create_credits_file()
-    service_obj = authenticate.authenticate_user(credits_file)
-    booked_slots = create_data.store_next_n_days(int(days_to_store), service_obj) # first arg is the number of days not including today to add to the data.
-                                                                                  # 0 returns today only, a negative returns no days
-    booked_slots = create_data.book_event(service_obj, int(days_to_store), booked_slots)
+    pass
     
 
 
 def volunteer():
-    pass
+    global booked_slots, days_to_store
+
+    credits_file = authenticate.open_create_credits_file()
+    service_obj = authenticate.authenticate_user(credits_file)
+    booked_slots = making_a_slot.check_available_slots(service_obj,int(days_to_store)) # first arg is the number of days not including today to add to the data.
+                                                                                  # 0 returns today only, a negative returns no days
+    booked_slots = create_data.book_event(service_obj, int(days_to_store), booked_slots)
 
 
 def authentication():
@@ -108,7 +109,10 @@ def delete_events(src_file):
 def main_function():
     global booked_slots, days_to_store
 
-    if sys.argv[1] == 'view_calendar':
+    if len(sys.argv) != 2:
+        print(help_func())
+
+    elif sys.argv[1] == 'view_calendar':
         store_days()
         print(user_viewing_of_calendar('events.csv'))
         delete_events('events.csv')

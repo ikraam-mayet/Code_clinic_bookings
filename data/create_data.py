@@ -1,5 +1,5 @@
 import csv
-from data.volunteer import create_slot
+from data.volunteer import making_a_slot
 from datetime import date, timedelta
 from data.format_data import *
 import data.display_calendar as display_calender
