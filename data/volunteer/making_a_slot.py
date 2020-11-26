@@ -1,12 +1,7 @@
-from authentication import authenticate
-from data import create_data
-from data import display_calendar
-import os
-import sys
 from datetime import datetime, timedelta, date
 
 
-def check_available_slots(booked_slots, days_stored):
+def ask_for_date():
     while True:
         try :
             date_ = input('Please enter a date i.e 07 November 2020: ').split()
@@ -16,27 +11,50 @@ def check_available_slots(booked_slots, days_stored):
             continue
         else:
             break
+    return date_
 
-    time_ = input("please enter time i.e 11:30: ")
 
-    year, month, day = int(date_[2]), datetime.strptime(date_[1], '%B').month, int(date_[0])
-    start_date = datetime(year, month, day, hour=int(time_.split(':')[0]), minute=int(time_.split(':')[1]))
-    end_date = start_date + timedelta(minutes=90)
+def ask_for_time():
 
-    if (start_date.day - date.today().day > days_stored):
-        print("Out of range. Please select a slot within the stored days.")
-        return None
+    while True:
+        time_ = input("please enter time i.e 11:30: ")
+        if len(time_) == 5:
+            return time_
+        else: continue
 
-    start_time = start_date.time()
-    end_time = end_date.time()
 
-    for booked_slot in booked_slots[' '.join(date_)]:
-        starts_in_booked_slot = (start_time >= booked_slot[0] and start_time < booked_slot[1]) # bool. True if start time is in an already booked slot
-        ends_in_booked_slot = (end_time >= booked_slot[0] and end_time < booked_slot[1]) # bool. True if end time is in an already booked slot
-        if starts_in_booked_slot or ends_in_booked_slot:
-            print("Slot booked. Try another date/time.")
-            return None
-    return volunteer(start_time)
+def call_date_time_check(days_stored):
+    while True:
+        date_ = ask_for_date()
+
+        time_ = ask_for_time()
+
+        year, month, day = int(date_[2]), datetime.strptime(date_[1], '%B').month, int(date_[0])
+        start_date = datetime(year, month, day, hour=int(time_.split(':')[0]), minute=int(time_.split(':')[1]))
+        end_date = start_date + timedelta(minutes=90)
+
+        if (start_date.day - date.today().day > days_stored):
+            print("Out of range. Please select a slot within the stored days.")
+            continue
+        else:
+            return date_, start_date, end_date
+
+
+def check_available_slots(booked_slots, days_stored):
+    while True:
+        date_ ,start_date, end_date = call_date_time_check(days_stored)
+
+        start_time = start_date.time()
+        end_time = end_date.time()
+        
+        for booked_slot in booked_slots[' '.join(date_)]:
+
+            starts_in_booked_slot = (start_time >= booked_slot[0] and start_time < booked_slot[1]) # bool. True if start time is in an already booked slot
+            ends_in_booked_slot = (end_time >= booked_slot[0] and end_time < booked_slot[1]) # bool. True if end time is in an already booked slot
+            if starts_in_booked_slot or ends_in_booked_slot:
+                print("Slot booked. Try another date/time.")
+                continue
+        return volunteer(start_time)
     
 
 def volunteer(start_time):
@@ -48,15 +66,19 @@ def volunteer(start_time):
 
 
     for i in range(3):
+        start = start_time
+        end = start
+        end[3] = int(start[3])+3
+        
         event = {
             'summary': summary,
             'description': description,
             'start': {
-                'dateTime': (start_time + max_time * i).strftime("%Y-%m-%dT%H:%M:%S"),
+                'dateTime': (start).strftime("%Y-%m-%dT%H:%M:%S"),
                 'timeZone': timezone,
             },
             'end': {
-                'dateTime': (start_time + max_time * (i+1)).strftime("%Y-%m-%dT%H:%M:%S"), 
+                'dateTime': end.strftime("%Y-%m-%dT%H:%M:%S"), 
                 'timeZone': timezone,
             },
             'attendees' : {
@@ -71,5 +93,6 @@ def volunteer(start_time):
             },
         }
         event_slots.append(event)
+        start_time = end
     
-        return event
+    return event

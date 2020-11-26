@@ -5,6 +5,7 @@ from data import display_calendar
 from data.volunteer import making_a_slot
 import os
 import sys
+from datetime import datetime, timedelta, date
 
 
 booked_slots = dict() # the booked slots, stored as {'Day 1': [[start time 1, end time 1], [start time 2, end time 2]]}
@@ -50,8 +51,12 @@ def volunteer():
 
     credits_file = authenticate.open_create_credits_file()
     service_obj = authenticate.authenticate_user(credits_file)
-    booked_slots = making_a_slot.check_available_slots(service_obj,int(days_to_store)) # first arg is the number of days not including today to add to the data.
-                                                                                  # 0 returns today only, a negative returns no days
+    print(user_viewing_of_calendar('events.csv'))
+    booked_slots = create_data.store_next_n_days(int(days_to_store), service_obj) # first arg is the number of days not including today to add to the data. 
+                                                                                  #0 returns today only, a negative returns no days
+    booked_slots = making_a_slot.check_available_slots(booked_slots,int(days_to_store)) # first arg is the number of days not including today to add to the data.
+                                                                                        # 0 returns today only, a negative returns no days
+    print(booked_slots)
     booked_slots = create_data.book_event(service_obj, int(days_to_store), booked_slots)
 
 
@@ -123,16 +128,20 @@ def main_function():
         delete_events('calendar_events.csv')
 
     elif sys.argv[1] == 'patient':
+        # store_days()
+        # patient_booking()
+        # print(user_viewing_of_calendar('events.csv'))
+        # delete_events('events.csv')
+        pass
+
+    elif sys.argv[1] == 'volunteer':
         store_days()
-        patient_booking()
+        volunteer()
         print(user_viewing_of_calendar('events.csv'))
         delete_events('events.csv')
 
     elif sys.argv[1] == 'authenticate':
         authentication()
-
-    elif sys.argv[1] == 'volunteer':
-        volunteer()
 
     elif sys.argv[1] ==  'volunteer_cal':
         volunteer_cancellation()
