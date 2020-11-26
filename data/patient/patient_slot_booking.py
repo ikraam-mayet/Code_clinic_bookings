@@ -1,27 +1,5 @@
 import datetime
 
-"""
-    In order to get this working, edit app.py, adding:
-
-    1. from patient_slot_booking import patient_book_slot
-
-    2. whichever function is used to book a slot, should have:
-
-        global booked_slots, days_to_store
-
-        store_days()
-        print(clinic_calendar('calendar_events.csv'))
-        delete_events('calendar_events.csv')
-
-        credits_file = authenticate.open_create_credits_file()
-        service_obj = authenticate.authenticate_user(credits_file)
-        booked_slots = create_data.store_next_n_days(int(days_to_store), service_obj)
-
-        patient_slot_booking.patient_book_slot(service_obj, booked_slots)
-
-    3. Please delete this comment
-"""
-
 
 def patient_book_slot(service_object, user_booked_slots):
 

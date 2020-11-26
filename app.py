@@ -1,10 +1,10 @@
-import csv
+import os
+import sys
 from authentication import authenticate
+from data.patient import patient_slot_booking
 from data import create_data
 from data import display_calendar
 from data.volunteer import making_a_slot
-import os
-import sys
 
 
 booked_slots = dict() # the booked slots, stored as {'Day 1': [[start time 1, end time 1], [start time 2, end time 2]]}
@@ -41,8 +41,16 @@ def clinic_calendar(src_fn):
 
 
 def patient_booking():
-    pass
-    
+    global booked_slots, days_to_store
+
+    print(clinic_calendar('calendar_events.csv'))
+    delete_events('calendar_events.csv')
+
+    credits_file = authenticate.open_create_credits_file()
+    service_obj = authenticate.authenticate_user(credits_file)
+    booked_slots = create_data.store_next_n_days(int(days_to_store), service_obj)
+
+    patient_slot_booking.patient_book_slot(service_obj, booked_slots)
 
 
 def volunteer():
