@@ -24,7 +24,8 @@ def generate_new_guest_summary(final_event):
     username = input('Please enter your student username: ')
     student_email = f"{username}@student.wethinkcode.co.za"
     new_guest = {'email': student_email, 'responseStatus': 'accepted'}
-    
+    cal = {'email': 'group2codeclinic@gmail.com', 'self': True, 'responseStatus': 'accepted'}
+
     try:
         new_summary = f"{final_event['summary']} // {username} session."
         final_event['summary'] = new_summary
@@ -34,7 +35,7 @@ def generate_new_guest_summary(final_event):
     if 'attendees' in final_event and len(final_event['attendees']) < 3:
         final_event['attendees'].append(new_guest)
     elif 'attendees' not in final_event:
-        final_event['attendees'] = new_guest
+        final_event['attendees'] = [new_guest, cal]  # add both the user and calendar as guests if it has no guests (which it will always have)
     else:
         print("Slot fully booked.")
         exit()

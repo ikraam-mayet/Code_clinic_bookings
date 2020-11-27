@@ -48,6 +48,7 @@ def patient_booking():
     credits_file = authenticate.open_create_credits_file()
     service_obj = authenticate.authenticate_user(credits_file)
     booked_slots = create_data.store_next_n_days(int(days_to_store), service_obj)
+    delete_events('events.csv')
 
     patient_slot_booking.patient_book_slot(service_obj, booked_slots)
 
