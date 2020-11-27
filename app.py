@@ -134,11 +134,10 @@ def main_function():
         delete_events('calendar_events.csv')
 
     elif sys.argv[1] == 'patient':
-        # store_days()
-        # patient_booking()
-        # print(user_viewing_of_calendar('events.csv'))
-        # delete_events('events.csv')
-        pass
+        store_days()
+        patient_booking()
+        print(user_viewing_of_calendar('events.csv'))
+        delete_events('events.csv')
 
     elif sys.argv[1] == 'volunteer':
         store_days()
