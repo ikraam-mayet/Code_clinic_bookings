@@ -54,45 +54,62 @@ def check_available_slots(booked_slots, days_stored):
             if starts_in_booked_slot or ends_in_booked_slot:
                 print("Slot booked. Try another date/time.")
                 continue
-        return volunteer(start_time)
+        return volunteer(start_time,date_)
     
 
-def volunteer(start_time):
-    summary = input("Username: ")
-    description = input("What topic do you want to volunteer for: ")
-    timezone = 'Africa/Johannesburg'
-    max_time = timedelta(minutes=30)
-    event_slots = list()
+def create_event(start_date,end_date, summary, description):
+    """
+    Book a time at the date and time given.
+    Generate an event between the start and end date.
+    Set notifications to an email 1 hour before and a pop up 10 minutes before.
+    """   
 
-
-    for i in range(3):
-        start = start_time
-        end = start
-        end[3] = int(start[3])+3
-        
-        event = {
-            'summary': summary,
-            'description': description,
-            'start': {
-                'dateTime': (start).strftime("%Y-%m-%dT%H:%M:%S"),
-                'timeZone': timezone,
+    event = {
+        'summary': summary,
+        'description': description,
+        'start': {
+            'dateTime': start_date.strftime('%Y-%m-%dT%H:%M:%S'),
+            'timeZone': 'Africa/Johannesburg',
             },
-            'end': {
-                'dateTime': end.strftime("%Y-%m-%dT%H:%M:%S"), 
-                'timeZone': timezone,
+        'end': {
+            'dateTime': end_date.strftime('%Y-%m-%dT%H:%M:%S'),
+            'timeZone': 'Africa/Johannesburg',
             },
-            'attendees' : {
+        'attendees': {
                 {'email' : 'group2codeclinic@gmail.com'}
             },
-            'reminders': {
-                'useDefault': False,
-                'overrides': [
-                    {'method': 'email', 'minutes': 24 * 60},
-                    {'method': 'popup', 'minutes': 10},
-                ],
+        'params' : {
+            'sendNotifications' : True
             },
+        'reminders': {
+            'useDefault': False,
+            'overrides' : [
+                {'method':'email', 'minutes':60},
+                {'method': 'popup', 'minutes':10}
+            ]
         }
-        event_slots.append(event)
-        start_time = end
-    
+    }
     return event
+
+
+def volunteer(start_time,date_):
+    summary = input("Username: ")
+    description = input("What topic do you want to volunteer for: ")
+    # max_time = timedelta(minutes=30)
+    event_slots = list()
+    start = start_time
+    start = str(date_[0]) + ' '+ str(date_[1]) + ' '+ str(date_[2]) + ' '+str(start_time)
+
+    for i in range(3):
+        start = datetime.strptime(str(start), '%Y-%m-%dT%H:%M:%S')
+        start = str(start)
+        start = start[11:]
+        end = datetime.strptime(str(start), '%Y-%m-%dT%H:%M:%S') + timedelta(minutes = 30)
+        end = str(end)
+        end = end[11:]
+        events = create_event(start,end,summary,description)
+        event_slots.append(events)
+        start = datetime.strptime(str(start), '%Y-%m-%dT%H:%M:%S') + timedelta(minutes = 30)
+        
+    return event_slots
+
