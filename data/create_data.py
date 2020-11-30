@@ -94,11 +94,7 @@ def write_to_csv(header_list, data_list, file_name):
             writer_obj.writerow(row)
 
 
-def book_event(service_obj, days, booked_slots):
-    event = None
-    while event is not None:
-        event = create_slot.volunteer_slot(booked_slots, days)
-
+def book_event(service_obj, days, event):
     made = service_obj.events().insert(calendarId='primary', body=event).execute()
     print('Event created: {}'.format(made.get('htmlLink')))
     return store_next_n_days(days, service_obj)

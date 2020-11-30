@@ -61,10 +61,10 @@ def volunteer():
     print(user_viewing_of_calendar('events.csv'))
     booked_slots = create_data.store_next_n_days(int(days_to_store), service_obj) # first arg is the number of days not including today to add to the data. 
                                                                                   #0 returns today only, a negative returns no days
-    booked_slots = making_a_slot.check_available_slots(booked_slots,int(days_to_store)) # first arg is the number of days not including today to add to the data.
+    generated_events = making_a_slot.check_available_slots(booked_slots,int(days_to_store)) # first arg is the number of days not including today to add to the data.
                                                                                         # 0 returns today only, a negative returns no days
-    print(booked_slots)
-    booked_slots = create_data.book_event(service_obj, int(days_to_store), booked_slots)
+    for event in generated_events:
+        booked_slots = create_data.book_event(service_obj, int(days_to_store), event)
 
 
 def authentication():

@@ -54,7 +54,7 @@ def check_available_slots(booked_slots, days_stored):
             if starts_in_booked_slot or ends_in_booked_slot:
                 print("Slot booked. Try another date/time.")
                 continue
-        return volunteer(start_time,date_)
+        return volunteer(start_date)
     
 
 def create_event(start_date,end_date, summary, description):
@@ -75,9 +75,9 @@ def create_event(start_date,end_date, summary, description):
             'dateTime': end_date.strftime('%Y-%m-%dT%H:%M:%S'),
             'timeZone': 'Africa/Johannesburg',
             },
-        'attendees': {
+        'attendees': [
                 {'email' : 'group2codeclinic@gmail.com'}
-            },
+        ],
         'params' : {
             'sendNotifications' : True
             },
@@ -92,24 +92,27 @@ def create_event(start_date,end_date, summary, description):
     return event
 
 
-def volunteer(start_time,date_):
+def volunteer(start_date):
     summary = input("Username: ")
     description = input("What topic do you want to volunteer for: ")
     # max_time = timedelta(minutes=30)
     event_slots = list()
-    start = start_time
-    start = str(date_[0]) + ' '+ str(date_[1]) + ' '+ str(date_[2]) + ' '+str(start_time)
+
+    # start = start_time
+    # start = str(date_[0]) + ' '+ str(date_[1]) + ' '+ str(date_[2]) + ' '+str(start_time)
 
     for i in range(3):
-        start = datetime.strptime(str(start), '%Y-%m-%dT%H:%M:%S')
-        start = str(start)
-        start = start[11:]
-        end = datetime.strptime(str(start), '%Y-%m-%dT%H:%M:%S') + timedelta(minutes = 30)
-        end = str(end)
-        end = end[11:]
-        events = create_event(start,end,summary,description)
+        # start = datetime.strptime(str(start), '%Y-%m-%dT%H:%M:%S')
+        # start = str(start)
+        # start = start[11:]
+        # end = datetime.strptime(str(start), '%Y-%m-%dT%H:%M:%S') + timedelta(minutes = 30)
+        # end = str(end)
+        # end = end[11:]
+        end_date = start_date + timedelta(minutes=30)
+        events = create_event(start_date, end_date, summary, description)
         event_slots.append(events)
-        start = datetime.strptime(str(start), '%Y-%m-%dT%H:%M:%S') + timedelta(minutes = 30)
+        start_date = end_date
+        # start = datetime.strptime(str(start), '%Y-%m-%dT%H:%M:%S') + timedelta(minutes = 30)
         
     return event_slots
 
