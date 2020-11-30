@@ -50,7 +50,7 @@ def check_available_slots(booked_slots, days_stored):
         for booked_slot in booked_slots[' '.join(date_)]:
 
             starts_in_booked_slot = (start_time >= booked_slot[0] and start_time < booked_slot[1]) # bool. True if start time is in an already booked slot
-            ends_in_booked_slot = (end_time >= booked_slot[0] and end_time < booked_slot[1]) # bool. True if end time is in an already booked slot
+            ends_in_booked_slot = (end_time > booked_slot[0] and end_time <= booked_slot[1]) # bool. True if end time is in an already booked slot
             if starts_in_booked_slot or ends_in_booked_slot:
                 print("Slot booked. Try another date/time.")
                 continue
