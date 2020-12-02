@@ -5,6 +5,7 @@ from data import create_data
 from data import display_calendar
 from data.volunteer import making_a_slot
 from data.patient import patient_slot_booking
+from data.volunteer import cancel_slot
 
 booked_slots = dict() # the booked slots, stored as {'Day 1': [[start time 1, end time 1], [start time 2, end time 2]]}
 days_to_store = ''
@@ -74,12 +75,19 @@ def authentication():
 
 
 def patient_cancellation():
+
     pass
 
 
 def volunteer_cancellation():
-    pass
-
+    credits_file = authenticate.open_create_credits_file()
+    service_obj = authenticate.authenticate_user(credits_file)
+    booked_slots = create_data.store_next_n_days(int(days_to_store), service_obj)
+    print(user_viewing_of_calendar('events.csv'))
+    cancel_slot.calling_of_cancelations_function(service_obj, booked_slots,service_obj)
+    booked_slots = create_data.store_next_n_days(int(days_to_store), service_obj)
+    print(user_viewing_of_calendar('events.csv'))
+    
 
 def delete():
     try:
@@ -144,14 +152,17 @@ def main_function():
     elif sys.argv[1] == 'volunteer':
         store_days()
         volunteer()
-        print(user_viewing_of_calendar('events.csv'))
+        print("\nCode clinics calendar: ")
+        print(clinic_calendar('calendar_events.csv'))
         delete_events('events.csv')
 
     elif sys.argv[1] == 'authenticate':
         authentication()
 
     elif sys.argv[1] ==  'volunteer_cal':
+        store_days()
         volunteer_cancellation()
+        delete_events('events.csv')
 
     elif sys.argv[1] == 'patient_cal':
         patient_cancellation()
