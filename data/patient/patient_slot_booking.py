@@ -3,7 +3,7 @@ import datetime
 
 def patient_book_slot(service_object, user_booked_slots):
 
-    desired_event = input("Input an event name that you would like to book (case sensitive): ")
+    desired_event = input("Input an event name that you would like to book: ")
 
     matches = get_matching_events(service_object, desired_event)
 
@@ -18,6 +18,7 @@ def patient_book_slot(service_object, user_booked_slots):
 
     returned = service_object.events().patch(calendarId='group2codeclinic@gmail.com', body=patched_event, eventId=final_event['id'], sendUpdates='all').execute()
     print(f"Slot booked. Please visit {returned.get('htmlLink')} to confirm.")
+    return returned
 
 
 def generate_new_guest_summary(final_event):
@@ -51,7 +52,7 @@ def get_matching_events(service_object, desired_event):
         exit()
 
     for event in calendar_events['items']:
-        if 'summary' in event and event['summary'] == desired_event.lower():
+        if 'summary' in event and event['summary'].lower() == desired_event.lower():
             matches.append(event)
 
     if len(matches) == 0:
@@ -67,6 +68,7 @@ def get_date_time(user_booked_slots):
     try:
         start_time_object = datetime.time.fromisoformat(start_time_str)
         end_time_object = (datetime.datetime.combine(datetime.date.today(), start_time_object) + datetime.timedelta(minutes=30)).time()
+        datetime.datetime.strptime(desired_date, "%d %B %Y")
     except ValueError:
         print('Please enter the correct time and date formats.')
         exit()
@@ -74,11 +76,12 @@ def get_date_time(user_booked_slots):
     for day in user_booked_slots:
         if day == desired_date:
             compare_slots(user_booked_slots[day], start_time_object, end_time_object)
+
     return desired_date, start_time_object
 
 
 def get_final_event(matches, start, date):
-    final_event = ''
+    final_event = dict()
     for event in matches:
         try:
             event_time = datetime.datetime.fromisoformat(event['start']['dateTime'])
@@ -91,9 +94,10 @@ def get_final_event(matches, start, date):
 
         if same_date and same_time:
             final_event = event
+            break
 
-    if final_event == '':
-        print("Invalid date and time.")
+    if not final_event:
+        print("No event for the given date and time.")
         exit()
     return final_event
 
