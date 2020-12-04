@@ -7,3 +7,5 @@ data/__pycache__/format_data.cpython-37.pyc
 data/volunteer/__pycache__/create_slot.cpython-37.pyc
 __pycache__/app.cpython-37.pyc
 tests/__pycache__/test_app.cpython-37.pyc
+data/patient/__pycache__/patient_slot_booking.cpython-37.pyc
+data/volunteer/__pycache__/making_a_slot.cpython-37.pyc
