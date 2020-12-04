@@ -25,6 +25,7 @@ def ask_for_time():
 
 def call_date_time_check(days_stored):
     while True:
+        
         date_ = ask_for_date()
 
         time_ = ask_for_time()
@@ -57,7 +58,7 @@ def check_available_slots(booked_slots, days_stored):
         return volunteer(start_date)
     
 
-def create_event(start_date,end_date, summary, description):
+def create_event(start_date,end_date, summary, description, student_email):
     """
     Book a time at the date and time given.
     Generate an event between the start and end date.
@@ -76,7 +77,7 @@ def create_event(start_date,end_date, summary, description):
             'timeZone': 'Africa/Johannesburg',
             },
         'attendees': [
-                {'email' : 'group2codeclinic@gmail.com'}
+                {'email' : student_email}
         ],
         'params' : {
             'sendNotifications' : True
@@ -94,6 +95,7 @@ def create_event(start_date,end_date, summary, description):
 
 def volunteer(start_date):
     summary = input("Username: ")
+    student_email = f"{summary}@student.wethinkcode.co.za"
     description = input("What topic do you want to volunteer for: ")
     # max_time = timedelta(minutes=30)
     event_slots = list()
@@ -109,7 +111,7 @@ def volunteer(start_date):
         # end = str(end)
         # end = end[11:]
         end_date = start_date + timedelta(minutes=30)
-        events = create_event(start_date, end_date, summary, description)
+        events = create_event(start_date, end_date, summary, description,student_email)
         event_slots.append(events)
         start_date = end_date
         # start = datetime.strptime(str(start), '%Y-%m-%dT%H:%M:%S') + timedelta(minutes = 30)

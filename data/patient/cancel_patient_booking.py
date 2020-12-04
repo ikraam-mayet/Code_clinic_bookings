@@ -1,5 +1,55 @@
 import datetime
 
+
+def patient_book_slot(service_object, user_booked_slots):
+
+    desired_event = input("Input an event name that you would like to book (case sensitive): ")
+
+    matches = get_matching_events(service_object, desired_event)
+
+    desired_date, start = get_date_time(user_booked_slots)
+
+    final_event = get_final_event(matches, start, desired_date)
+
+    final_event = generate_new_guest_summary(final_event)
+
+
+    remove_att = final_event['attendees']
+    del final_event['attendees']
+    remove_att = remove_att[:1]
+    final_event['attendees'] = remove_att
+    remove_summ = final_event['summary']
+    del final_event['summary']
+    remove_summ = remove_summ.split(" ")
+    remove_summ = remove_summ[0]
+    final_event['summary'] = remove_summ
+
+    service_object.events().update(calendarId='group2codeclinic@gmail.com', body=final_event, eventId=final_event['id'], sendUpdates='all').execute()
+    print(f"Patient booking has been cancelled\nHave a good day! ")
+
+
+def generate_new_guest_summary(final_event):
+    username = input('Please enter your student username: ')
+    student_email = f"{username}@student.wethinkcode.co.za"
+    new_guest = {'email': student_email, 'responseStatus': 'accepted'}
+    cal = {'email': 'group2codeclinic@gmail.com', 'self': True, 'responseStatus': 'accepted'}
+
+    try:
+        new_summary = f"{final_event['summary']} // {username} session."
+        final_event['summary'] = new_summary
+    except KeyError:
+        final_event['summary'] = f"{username} session."
+
+    if 'attendees' in final_event and len(final_event['attendees']) < 3:
+        final_event['attendees'].append(new_guest)
+    elif 'attendees' not in final_event:
+        final_event['attendees'] = [new_guest, cal]  # add both the user and calendar as guests if it has no guests (which it will always have)
+    else:
+        print("Slot fully booked.")
+        exit()
+    return final_event
+
+
 def get_matching_events(service_object, desired_event):
     calendar_events = service_object.events().list(calendarId='group2codeclinic@gmail.com').execute()
     matches = list()
@@ -16,25 +66,6 @@ def get_matching_events(service_object, desired_event):
         print("Event not found.")
         exit()
     return matches
-
-
-def calling_of_cancelations_function(service_object, user_booked_slots,service_obj):
-
-    desired_event = input("Input an event name that you would like to book (case sensitive): ")
-
-    matches = get_matching_events(service_object, desired_event)
-
-    desired_date, start = get_date_time(user_booked_slots)
-
-    final_event = get_final_event(matches, start, desired_date)
-    event_id = final_event['id']
-
-    if len(final_event['attendees']) == 1:
-        volunteer_cancel_slot(service_obj, event_id)
-        print("\nVolunteering has been deleted")
-    else:
-        print("\nSlot has been booked by patient")
-
 
 
 def get_date_time(user_booked_slots):
@@ -68,6 +99,7 @@ def get_final_event(matches, start, date):
 
         if same_date and same_time:
             final_event = event
+
     if final_event == '':
         print("Invalid date and time.")
         exit()
@@ -78,9 +110,3 @@ def compare_slots(day, start, end):
     for slot in day:
         if start >= slot[0] and start < slot[1]:
             return True
-        
-
-
-def volunteer_cancel_slot(service_obj, event_id):
-    # eventId = service_obj['Id']
-    service_obj.events().delete(calendarId='group2codeclinic@gmail.com', eventId=event_id).execute()

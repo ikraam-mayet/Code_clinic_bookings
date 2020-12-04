@@ -6,6 +6,7 @@ from data import display_calendar
 from data.volunteer import making_a_slot
 from data.patient import patient_slot_booking
 from data.volunteer import cancel_slot
+from data.patient import cancel_patient_booking
 
 booked_slots = dict() # the booked slots, stored as {'Day 1': [[start time 1, end time 1], [start time 2, end time 2]]}
 days_to_store = ''
@@ -75,11 +76,22 @@ def authentication():
 
 
 def patient_cancellation():
+    global booked_slots, days_to_store
 
-    pass
+    print(clinic_calendar('calendar_events.csv'))
+    delete_events('calendar_events.csv')
+
+    credits_file = authenticate.open_create_credits_file()
+    service_obj = authenticate.authenticate_user(credits_file)
+    booked_slots = create_data.store_next_n_days(int(days_to_store), service_obj)
+    cancel_patient_booking.patient_book_slot(service_obj, booked_slots)
+
+    delete_events('events.csv')
 
 
 def volunteer_cancellation():
+    global booked_slots, days_to_store
+
     credits_file = authenticate.open_create_credits_file()
     service_obj = authenticate.authenticate_user(credits_file)
     booked_slots = create_data.store_next_n_days(int(days_to_store), service_obj)
@@ -165,6 +177,7 @@ def main_function():
         delete_events('events.csv')
 
     elif sys.argv[1] == 'patient_cal':
+        store_days()
         patient_cancellation()
 
     elif sys.argv[1] == 'delete':

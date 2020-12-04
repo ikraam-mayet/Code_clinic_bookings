@@ -14,7 +14,6 @@ def show_events():
     """
     display_calender.display_cal('events.csv')
 
-
 def store_next_n_days(n, service_obj):
     global data_list
 
@@ -95,6 +94,6 @@ def write_to_csv(header_list, data_list, file_name):
 
 
 def book_event(service_obj, days, event):
-    made = service_obj.events().insert(calendarId='primary', body=event).execute()
+    made = service_obj.events().insert(calendarId='group2codeclinic@gmail.com', body=event).execute()
     print('Event created: {}'.format(made.get('htmlLink')))
     return store_next_n_days(days, service_obj)
