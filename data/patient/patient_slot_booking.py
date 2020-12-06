@@ -3,29 +3,41 @@ import datetime
 
 def patient_book_slot(service_object, user_booked_slots):
 
-    desired_event = input("Input an event name that you would like to book: ")
+    while True:
+        try:
+            print("Enter exit/quit/close at any point to quit.")
+            desired_event = input("Input an event name that you would like to book: ")
 
-    matches = get_matching_events(service_object, desired_event)
+            if desired_event.lower().strip() in ['exit', 'quit', 'close']:
+                exit()
 
-    desired_date, start = get_date_time(user_booked_slots)
+            matches = get_matching_events(service_object, desired_event)
 
-    final_event = get_final_event(matches, start, desired_date)
+            desired_date, start = get_date_time(user_booked_slots)
 
-    final_event = generate_new_guest_summary(final_event)
+            final_event = get_final_event(matches, start, desired_date)
 
-    patched_event = {'summary': final_event['summary'],
-                     'attendees': final_event['attendees']}
+            final_event = generate_new_guest_summary(final_event)
 
-    returned = service_object.events().patch(calendarId='group2codeclinic@gmail.com', body=patched_event, eventId=final_event['id'], sendUpdates='all').execute()
-    print(f"Slot booked. Please visit {returned.get('htmlLink')} to confirm.")
-    return returned
+            patched_event = {'summary': final_event['summary'],
+                             'attendees': final_event['attendees']}
+
+            returned = service_object.events().patch(calendarId='group2codeclinic@gmail.com', body=patched_event, eventId=final_event['id'], sendUpdates='all').execute()
+            print(f"Slot booked. Please visit {returned.get('htmlLink')} to confirm.")
+            return returned
+
+        except ValueError:
+            continue
 
 
 def generate_new_guest_summary(final_event):
-    username = input('Please enter your student username: ')
+    username = input('Please enter your student username: ').lower().strip()
     student_email = f"{username}@student.wethinkcode.co.za"
     new_guest = {'email': student_email, 'responseStatus': 'accepted'}
     cal = {'email': 'group2codeclinic@gmail.com', 'self': True, 'responseStatus': 'accepted'}
+
+    if username in ['exit', 'quit', 'close']:
+        exit()
 
     try:
         new_summary = f"{final_event['summary']} // {username} session."
@@ -33,13 +45,13 @@ def generate_new_guest_summary(final_event):
     except KeyError:
         final_event['summary'] = f"{username} session."
 
-    if 'attendees' in final_event and len(final_event['attendees']) < 3:
+    if 'attendees' in final_event and len(final_event['attendees']) < 2:
         final_event['attendees'].append(new_guest)
     elif 'attendees' not in final_event:
         final_event['attendees'] = [new_guest, cal]  # add both the user and calendar as guests if it has no guests (which it will always have)
     else:
         print("Slot fully booked.")
-        exit()
+        raise ValueError
     return final_event
 
 
@@ -57,13 +69,18 @@ def get_matching_events(service_object, desired_event):
 
     if len(matches) == 0:
         print("Event not found.")
-        exit()
+        raise ValueError
     return matches
 
 
 def get_date_time(user_booked_slots):
-    desired_date = input("Please enter the date of the event (i.e 23 December 2020): ")
-    start_time_str = input("Please enter the start time of the slot you want to book (i.e 10:00): ")
+    desired_date = input("Please enter the date of the event (i.e 23 December 2020): ").strip()
+    start_time_str = input("Please enter the start time of the slot you want to book (i.e 10:00): ").strip()
+
+    if desired_date.lower() in ['exit', 'quit', 'close']:
+        exit()
+    if start_time_str.lower() in ['exit', 'quit', 'close']:
+        exit()
 
     try:
         start_time_object = datetime.time.fromisoformat(start_time_str)
@@ -71,7 +88,7 @@ def get_date_time(user_booked_slots):
         datetime.datetime.strptime(desired_date, "%d %B %Y")
     except ValueError:
         print('Please enter the correct time and date formats.')
-        exit()
+        raise ValueError
 
     for day in user_booked_slots:
         if day == desired_date:
@@ -87,7 +104,7 @@ def get_final_event(matches, start, date):
             event_time = datetime.datetime.fromisoformat(event['start']['dateTime'])
         except KeyError:
             print('Event has no start date. Check if it has been cancelled.')
-            exit()
+            raise ValueError
 
         same_time = start == event_time.time()
         same_date = date == event_time.strftime("%d %B %Y")
@@ -98,7 +115,7 @@ def get_final_event(matches, start, date):
 
     if not final_event:
         print("No event for the given date and time.")
-        exit()
+        raise ValueError
     return final_event
 
 
@@ -106,7 +123,7 @@ def compare_slots(day, start, end):
     for slot in day:
         if start >= slot[0] and start < slot[1]:
             print('Slot blocked in your personal calendar.')
-            exit()
+            raise ValueError
         if end > slot[0] and end <= slot[1]:
             print('Slot blocked in your personal calendar.')
-            exit()
+            raise ValueError

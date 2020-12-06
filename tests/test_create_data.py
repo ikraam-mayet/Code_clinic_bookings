@@ -1,3 +1,4 @@
+import os
 import unittest
 from datetime import date, time, timedelta
 import tests.mock_api as mock_api
@@ -63,6 +64,9 @@ class Test_Create_Data(unittest.TestCase):
         self.assertEqual(first_arg[self.today][0], booked_slots[self.today][0])
         self.assertEqual(second_arg[self.tomorrow][0], booked_slots[self.tomorrow][0])
         self.assertEqual(third_arg[self.one_hundred_days_later][0], booked_slots[self.one_hundred_days_later][0])
+
+    def tests_complete(self):
+        os.remove("events.csv")
 
 if __name__ == "__main__":
     unittest.main()

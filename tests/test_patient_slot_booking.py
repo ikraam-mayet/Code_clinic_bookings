@@ -74,7 +74,7 @@ class Test_Booking(unittest.TestCase):
     def test_generate_new_guest_summary_full(self):
         sys.stdout, temp = StringIO(), sys.stdout
 
-        self.assertRaises(SystemExit, psb.generate_new_guest_summary,
+        self.assertRaises(ValueError, psb.generate_new_guest_summary,
         {'attendees': [1, 2, 3]})
 
         sys.stdout.seek(0)
@@ -95,7 +95,7 @@ class Test_Booking(unittest.TestCase):
         sys.stdout, temp = StringIO(), sys.stdout
         service = mock_api.Mock_Service()
 
-        self.assertRaises(SystemExit, psb.get_matching_events, service, 'Nope')
+        self.assertRaises(ValueError, psb.get_matching_events, service, 'Nope')
 
         sys.stdout.seek(0)
         lines = sys.stdout.readlines()       
@@ -121,7 +121,7 @@ class Test_Booking(unittest.TestCase):
 
         times = [[datetime.time(hour=8), datetime.time(hour=9)]]
         
-        self.assertRaises(SystemExit, psb.get_date_time, {f"{self.today_}": times})
+        self.assertRaises(ValueError, psb.get_date_time, {f"{self.today_}": times})
 
         sys.stdout.seek(0)
         lines = sys.stdout.readlines()
@@ -133,7 +133,7 @@ class Test_Booking(unittest.TestCase):
     def test_get_date_time_wrong_date_format(self):
         sys.stdout, temp = StringIO(), sys.stdout
 
-        self.assertRaises(SystemExit, psb.get_date_time, {})
+        self.assertRaises(ValueError, psb.get_date_time, {})
 
         sys.stdout.seek(0)
         lines = sys.stdout.readlines()
@@ -145,7 +145,7 @@ class Test_Booking(unittest.TestCase):
     def test_get_date_time_wrong_time_format(self):
         sys.stdout, temp = StringIO(), sys.stdout
 
-        self.assertRaises(SystemExit, psb.get_date_time, {})
+        self.assertRaises(ValueError, psb.get_date_time, {})
 
         sys.stdout.seek(0)
         lines = sys.stdout.readlines()
@@ -156,7 +156,7 @@ class Test_Booking(unittest.TestCase):
     def test_get_final_event_no_result_found(self):
         sys.stdout, temp = StringIO(), sys.stdout
 
-        self.assertRaises(SystemExit, psb.get_final_event, [], datetime.time(hour=15), '01 December 2020')
+        self.assertRaises(ValueError, psb.get_final_event, [], datetime.time(hour=15), '01 December 2020')
 
         sys.stdout.seek(0)
         lines = sys.stdout.readlines()

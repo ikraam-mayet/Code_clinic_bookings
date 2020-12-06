@@ -65,8 +65,6 @@ def volunteer():
                                                                                         # 0 returns today only, a negative returns no days
     for event in generated_events:
         booked_slots = create_data.book_event(service_obj, int(days_to_store), event)
-    print(user_viewing_of_calendar('events.csv'))
-
 
 def authentication():
     credits_file = authenticate.open_create_credits_file()
