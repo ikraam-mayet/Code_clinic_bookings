@@ -3,6 +3,7 @@ from data.volunteer import making_a_slot
 from datetime import date, timedelta
 from data.format_data import *
 import data.display_calendar as display_calender
+import googleapiclient.errors as errors
 
 data_list = []
 
@@ -58,7 +59,11 @@ def get_clinics_cal(days_to_store, service_obj):
     end_date = str(date.today() + timedelta(days=int(days_to_store))) + 'T23:59:00.000Z'
 
     data_list.clear()
-    calend = service_obj.events().list(calendarId='group2codeclinic@gmail.com', timeMin=current_date, timeMax=end_date, singleEvents=True, orderBy='startTime').execute()
+    try:
+        calend = service_obj.events().list(calendarId='group2codeclinic@gmail.com', timeMin=current_date, timeMax=end_date, singleEvents=True, orderBy='startTime').execute()
+    except errors.HttpError:
+        print("User not connected to the clinic calendar")
+        exit()
     data_list, booked_slots = add_data(calend, data_list, booked_slots)
     write_to_csv(header_list, data_list, 'calendar_events.csv')
 

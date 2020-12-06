@@ -36,9 +36,6 @@ class Mock_Events:
     def list(self, calendarId='primary', timeMin='0', timeMax='1', singleEvents=True, orderBy='startTime'):
         events_to_return = copy.deepcopy(self.events)
 
-        if calendarId == 'group2codeclinic@gmail.com':
-            raise ValueError('User not connected to code clinics calendar.')
-
         index = 0
         for event in self.events['items']:
             if event['start']['dateTime'] < timeMin and timeMin != '0':
@@ -51,13 +48,28 @@ class Mock_Events:
 
         return Fake_Execute_Obj(what_to_return=events_to_return)
 
-    def get(self, element):
-        return self.events[element]
-
     def insert(self, calendarId='primary', body=None):
         self.events['items'].append(body)
         body['htmlLink'] = f"https://www.test.co.za/calendar/event?eid=wEStilLDontExist{random.randint(4, 9999)}"
         return Fake_Execute_Obj(what_to_return=body)
+
+    def patch(self, calendarId='nix', body=None, eventId='0', sendUpdates='none'):
+        if eventId == '0' or calendarId == 'nix':
+            raise ValueError('Event ID and body required.')
+
+        chosen_one = self.events['items'][0]
+
+        if body is None or type(body) is not dict:
+            return Fake_Execute_Obj(chosen_one)
+        else:
+            changed_keys = body.keys()
+            for key in changed_keys:
+                try:
+                    chosen_one[key] = body[key]
+                except KeyError:
+                    continue
+        return Fake_Execute_Obj(chosen_one)
+
 
     def fake_events(self):
         event_one = {'kind': 'test#event', 'etag': '"678-999-8212"',
@@ -68,6 +80,7 @@ class Mock_Events:
         'organizer': {'email': 'soulja@boy.wedonotthinkcodesincewedontexist.co.za', 'self': True},
         'start': {'dateTime': datetime.date.today().strftime("%Y-%m-%dT08:00:00"), 'timeZone': 'Africa/Johannesburg'},
         'end': {'dateTime': datetime.date.today().strftime("%Y-%m-%dT09:00:00"), 'timeZone': 'Africa/Johannesburg'},
+        'attendees': [{'email': 'send@help.co.za'}],
         'recurringEventId': '0mlugf7j95b8_20201116T060000Z',
         'originalStartTime': {'dateTime': '2020-11-16T08:00:00+02:00', 'timeZone': 'Africa/Johannesburg'},
         'iCalUID': '0mlugf7j95b8_20201116T060000Z@google.com', 'sequence': 0, 

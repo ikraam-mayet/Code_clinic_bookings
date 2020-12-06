@@ -14,9 +14,9 @@ def open_create_credits_file(delete_file=False):
 
     user_home = os.path.expanduser('~') # String that holds user's home dir
 
-    if (os.path.isfile(f"{user_home}/.credentials.pkl")) and (delete_file == True or 'delete' in sys.argv):
+    if delete_file and os.path.isfile(f"{user_home}/.credentials.pkl"):
         os.remove(f"{user_home}/.credentials.pkl")
-    # Check if credentials file exists, if it does read the active credentials from it
+
     try:
         print('Authenticating...')
         credits_file = open(f"{user_home}/.credentials.pkl", "rb")
@@ -40,7 +40,8 @@ def open_create_credits_file(delete_file=False):
             credits_file.close()
             print('Authentication failed.\nPlease check if their is a client_secret.json file in the home directory.\nPlease give the app permission to your calendar or try again in 5 minutes.')
             exit()
-    
+
+
 def get_flow():
     # Level of permission we want to request for the application
     scopes = ['https://www.googleapis.com/auth/calendar']
