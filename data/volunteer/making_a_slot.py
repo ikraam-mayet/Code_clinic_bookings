@@ -60,7 +60,7 @@ def check_available_slots(booked_slots, days_stored):
         return volunteer(start_date)
     
 
-def create_event(start_date,end_date, summary, description):
+def create_event(start_date,end_date, summary, description, student_email):
     """
     Book a time at the date and time given.
     Generate an event between the start and end date.
@@ -79,7 +79,7 @@ def create_event(start_date,end_date, summary, description):
             'timeZone': 'Africa/Johannesburg',
             },
         'attendees': [
-                {'email' : 'group2codeclinic@gmail.com'}
+                {'email' : student_email}
         ],
         'params' : {
             'sendNotifications' : True
@@ -97,12 +97,13 @@ def create_event(start_date,end_date, summary, description):
 
 def volunteer(start_date):
     summary = input("Username: ")
+    user_email  = summary + '@student.wethinkcode.co.za'
     description = input("What topic do you want to volunteer for: ")
     event_slots = list()
 
     for i in range(3):
         end_date = start_date + timedelta(minutes=30)
-        events = create_event(start_date, end_date, summary, description)
+        events = create_event(start_date, end_date, summary, description,user_email)
         event_slots.append(events)
         start_date = end_date    
     return event_slots
