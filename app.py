@@ -18,6 +18,10 @@ def store_days():
     If an int isn't entered 
     """
     global days_to_store
+
+    if '|' in sys.argv:
+        days_to_store = 7
+        return days_to_store
             
     while True:
         try:
@@ -26,7 +30,7 @@ def store_days():
             print("\nInteger was not entered correctly.\nTry again.\n")
             continue
 
-        else: break
+        else: return days_to_store
 
 
 def delete_events(src_file):
@@ -41,6 +45,8 @@ def user_viewing_of_calendar(src_fn):
     doesn't exits it created the file again based of the authentication and 
     amount of days to be displayed.
     """
+    global booked_slots
+
     try:
         return display_calendar.display_cal(src_fn)
 
@@ -60,6 +66,8 @@ def clinic_calendar(src_fn):
     displayed. if the file doesn't exist it recreated the file based on how 
     many days to be displayed.
     """
+    global booked_slots 
+
     try:
         return display_calendar.display_cal(src_fn)
 
@@ -67,7 +75,7 @@ def clinic_calendar(src_fn):
         service_obj = authentication()
         booked_slots = create_data.get_clinics_cal(int(days_to_store), service_obj) # first arg is the number of days not including today to add to the data.
                                                                                       # 0 returns today only, a negative returns no days
-        return display_calendar.display_cal(src_fn)
+        return display_calendar.display_volunteer_cal(src_fn)
 
 
 def patient_booking():
@@ -206,12 +214,15 @@ Cancelation:
 
 
 def main_function():
+    """  
+    The main function that runs the program
+    """
     global booked_slots, days_to_store
 
-    if len(sys.argv) != 2:
-        print(help_func())
+    # elif len(sys.argv) != 2:
+    #     print(help_func())
 
-    elif sys.argv[1] == '-v':
+    if sys.argv[1] == '-v':
         store_days()
         print(user_viewing_of_calendar('events.csv'))
         delete_events('events.csv')

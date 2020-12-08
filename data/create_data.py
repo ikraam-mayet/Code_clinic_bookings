@@ -74,11 +74,14 @@ def add_data(calendar_events_dict, data_list, booked_slots):
     # add event data into booked slots and data list
     for event in calendar_events_dict['items']:
         if event['status'] != 'cancelled':
-            summary = event['summary'] if 'summary' in event else 'Empty Event'
+            summary = event['summary'] if 'summary' in event else 'Empty Event.'
+            description = event['description'] if 'description' in event else 'Empty Description.'
             start_date, start_time, start_iso_time = get_time_date(event['start']['dateTime'])  # get an event's start date time
             end_date, end_time, end_iso_time = get_time_date(event['end']['dateTime'])
+            attendees = event['attendees'] if 'attendees' in event else 0
+            attendees = len(attendees) if not isinstance(attendees, int) else 0
 
-            data_list.append([summary, start_date, start_time, end_date, end_time])  # added start iso time for sorting
+            data_list.append([summary, description, start_date, start_time, end_date, end_time, attendees])  # added start iso time for sorting
 
             if start_date in booked_slots:
                 booked_slots[start_date].append([start_iso_time.time(), end_iso_time.time()])
