@@ -8,13 +8,6 @@ import googleapiclient.errors as errors
 data_list = []
 
 
-def show_events():
-    """
-    This functions calls the display_cal function from display_calender to 
-    display the calender
-    """
-    display_calender.display_cal('events.csv')
-
 def store_next_n_days(n, service_obj):
     global data_list
 
@@ -33,15 +26,6 @@ def store_next_n_days(n, service_obj):
     data_list = []
     data_list, booked_slots = add_data(calend, data_list, booked_slots)
     write_to_csv(header_list, data_list, 'events.csv')
-
-    # # add the code clinic calendar's events in the time period if the calendar is connected to the user's account
-    # try:
-    #     data_list.clear()
-    #     calend = service_obj.events().list(calendarId='group2codeclinic@gmail.com', timeMin=current_date, timeMax=end_date, singleEvents=True, orderBy='startTime').execute()
-    #     data_list, booked_slots = add_data(calend, data_list, booked_slots)
-    #     write_to_csv(header_list, data_list, 'calendar_events.csv')
-    # except:
-    #     pass
 
     return booked_slots
 

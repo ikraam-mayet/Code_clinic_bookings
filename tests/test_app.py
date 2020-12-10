@@ -8,6 +8,7 @@ from data import create_data
 from data import display_calendar
 import app
 
+""" Need to do the other unittest """
 
 class test_app(unittest.TestCase):
 
@@ -16,10 +17,10 @@ class test_app(unittest.TestCase):
         src_fn= 'tests/test_event.csv'
         self.maxDiff = None
         result = app.user_viewing_of_calendar(src_fn)
-        self.assertEqual(result,"""╒══════════════╤══════════════╤══════════════╤════════════╤════════════╕
-│ Event name   │ Start Date   │ Start Time   │ End Date   │ End Time   │
-╞══════════════╪══════════════╪══════════════╪════════════╪════════════╡
-│ col1         │ col2         │ col3         │ 1          │ 3          │
-├──────────────┼──────────────┼──────────────┼────────────┼────────────┤
-│ foo          │ 2            │ 5            │ bar        │ e          │
-╘══════════════╧══════════════╧══════════════╧════════════╧════════════╛""")
+        self.assertEqual(result,"""╒══════════════╤═══════════════╤══════════════╤══════════════╤════════════╤════════════╕
+│ Event name   │ Description   │ Start Date   │ Start Time   │ End Date   │ End Time   │
+╞══════════════╪═══════════════╪══════════════╪══════════════╪════════════╪════════════╡
+│ \u001b[34mcol1         │ col2          │ col3         │ 1            │ 3          │ 4\u001b[0m          │
+├──────────────┼───────────────┼──────────────┼──────────────┼────────────┼────────────┤
+│ foo          │ 2             │ 5            │ bar          │ e          │ z          │
+╘══════════════╧═══════════════╧══════════════╧══════════════╧════════════╧════════════╛""")

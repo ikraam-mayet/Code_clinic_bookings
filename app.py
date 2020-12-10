@@ -75,7 +75,7 @@ def clinic_calendar(src_fn):
         service_obj = authentication()
         booked_slots = create_data.get_clinics_cal(int(days_to_store), service_obj) # first arg is the number of days not including today to add to the data.
                                                                                       # 0 returns today only, a negative returns no days
-        return display_calendar.display_volunteer_cal(src_fn)
+        return display_calendar.display_cal(src_fn)
 
 
 def patient_booking():
@@ -167,7 +167,7 @@ def volunteer_cancellation():
     service_obj = authentication()
     booked_slots = create_data.store_next_n_days(int(days_to_store), service_obj)
     print(user_viewing_of_calendar('events.csv'))
-    cancel_slot.calling_of_cancelations_function(service_obj, booked_slots,service_obj)
+    print(cancel_slot.calling_of_cancelations_function(service_obj, booked_slots,service_obj))
     booked_slots = create_data.store_next_n_days(int(days_to_store), service_obj)
     print(user_viewing_of_calendar('events.csv'))
     
