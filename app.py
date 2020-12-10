@@ -19,7 +19,7 @@ def store_days():
     """
     global days_to_store
 
-    if '|' in sys.argv:
+    if not sys.stdout.isatty():
         days_to_store = 7
         return days_to_store
             
@@ -219,10 +219,10 @@ def main_function():
     """
     global booked_slots, days_to_store
 
-    # elif len(sys.argv) != 2:
-    #     print(help_func())
+    if len(sys.argv) != 2 and sys.stdout.isatty():
+        print(help_func())
 
-    if sys.argv[1] == '-v':
+    elif sys.argv[1] == '-v':
         store_days()
         print(user_viewing_of_calendar('events.csv'))
         delete_events('events.csv')

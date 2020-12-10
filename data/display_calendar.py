@@ -41,6 +41,19 @@ def display_cal(src_fn):
         data = [ elem for elem in data_list if elem not in header]
 
         data_list2 = divide_chunks(data, 7)
+
+        for i in range (len(data_list2) - 1):
+                if int(data_list2[i][6]) > 1:
+                        data_list2[i][0] = '\u001b[31;1m'+data_list2[i][0]
+                        data_list2[i][5] = data_list2[i][5]+'\u001b[0m'
+
+                elif int(data_list2[i][6]) == 1:
+                        data_list2[i][0] = '\u001b[32;1m'+data_list2[i][0]
+                        data_list2[i][5] = data_list2[i][5]+'\u001b[0m'
+
+                else:
+                        data_list2[i][0] = '\u001b[34m'+data_list2[i][0]
+                        data_list2[i][5] = data_list2[i][5]+'\u001b[0m'
         
         remove_attendees(data_list2)
 
@@ -70,9 +83,15 @@ def display_volunteer_cal(src_fn):
                 if int(data_list2[i][6]) > 1:
                         data_list2[i][0] = '\u001b[31;1m'+data_list2[i][0]
                         data_list2[i][5] = data_list2[i][5]+'\u001b[0m'
-                elif data_list2[i][6] == 1:
+
+                elif int(data_list2[i][6]) == 1:
                         data_list2[i][0] = '\u001b[32;1m'+data_list2[i][0]
                         data_list2[i][5] = data_list2[i][5]+'\u001b[0m'
+
+                else:
+                        data_list2[i][0] = '\u001b[34m'+data_list2[i][0]
+                        data_list2[i][5] = data_list2[i][5]+'\u001b[0m'
+
                         
         remove_attendees(data_list2)
 
