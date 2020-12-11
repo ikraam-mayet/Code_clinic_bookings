@@ -65,6 +65,7 @@ def add_data(calendar_events_dict, data_list, booked_slots):
             attendees = event['attendees'] if 'attendees' in event else 0
             attendees = len(attendees) if not isinstance(attendees, int) else 0
 
+            description, summary = format_summary_description(description, summary)
             data_list.append([summary, description, start_date, start_time, end_date, end_time, attendees])  # added start iso time for sorting
 
             if start_date in booked_slots:
@@ -73,6 +74,21 @@ def add_data(calendar_events_dict, data_list, booked_slots):
                 booked_slots[start_date] = []
                 booked_slots[start_date].append([start_iso_time.time(), end_iso_time.time()])
     return data_list, booked_slots
+
+
+def format_summary_description(description, summary):
+
+    if len(description) > 60:
+        description = description[:61]
+    
+    if len(summary) > 60:
+        summary = summary[:61]
+
+    if ',' not in description and ',' not in summary:
+        return description, summary
+
+    return description.replace(',', ' '), summary.replace(',', ' ')
+
 
 
 def write_to_csv(header_list, data_list, file_name):
