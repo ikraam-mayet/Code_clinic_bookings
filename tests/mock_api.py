@@ -112,7 +112,21 @@ class Mock_Events:
         'iCalUID': 'Bethany-Esda@google.com', 'sequence': 0,
         'reminders': {'useDefault': True}}
 
-        return [event_one, event_two, event_three]
+        event_four = {'kind': 'test#event', 'etag': '"try-hard-101"',
+        'id': '0mlugf7j95b8_20201116T956841Z', 'status': 'confirmed',
+        'htmlLink': 'https://www.test.co.za/calendar/event?eid=wEStilLDontExist',
+        'created': '2020-10-24T09:01:58.000Z', 'updated': '2020-10-24T09:03:27.846Z',
+        'summary': 'Maybe I found the easter egg', 'creator': {'email': 'tryharders@wannabees.wedonotthinkcodesincewedontexist.co.za', 'self': True},
+        'organizer': {'email': 'tryharders@wannabees.wedonotthinkcodesincewedontexist.co.za', 'self': True},
+        'start': {'dateTime': datetime.date.today().strftime("%Y-%m-%dT08:00:00"), 'timeZone': 'Africa/Johannesburg'},
+        'end': {'dateTime': datetime.date.today().strftime("%Y-%m-%dT09:00:00"), 'timeZone': 'Africa/Johannesburg'},
+        'attendees': [{'email': 'send@help.co.za'},{'email': 'IamHereTo@help.co.za'}],
+        'recurringEventId': '0mlugf7j95b8_20201116T060000Z',
+        'originalStartTime': {'dateTime': '2020-11-16T08:00:00+02:00', 'timeZone': 'Africa/Johannesburg'},
+        'iCalUID': '0mlugf7j95b8_20201116T060000Z@google.com', 'sequence': 0, 
+        'reminders': {'useDefault': True}}
+
+        return [event_one, event_two, event_three,event_four]
 
 
 class Fake_Execute_Obj:
