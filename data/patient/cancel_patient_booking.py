@@ -1,7 +1,7 @@
 import datetime
 
 
-def patient_book_slot(service_object, user_booked_slots):
+def patient_cancel_slot(service_object, user_booked_slots):
 
     desired_event = input("Input an event name that you would like to book (case sensitive): ")
 
@@ -24,8 +24,8 @@ def patient_book_slot(service_object, user_booked_slots):
     remove_summ = remove_summ[0]
     final_event['summary'] = remove_summ
 
-    service_object.events().update(calendarId='group2codeclinic@gmail.com', body=final_event, eventId=final_event['id'], sendUpdates='all').execute()
     print(f"Patient booking has been cancelled\nHave a good day! ")
+    return service_object.events().update(calendarId='group2codeclinic@gmail.com', body=final_event, eventId=final_event['id'], sendUpdates='all').execute()
 
 
 def generate_new_guest_summary(final_event):
