@@ -77,14 +77,14 @@ class test_acceptance(unittest.TestCase):
         self.assertTrue(test_result.wasSuccessful(), "cancel_patient_booking unit tests should succeed")
 
 
-    def test_unittest_cancel_slots(self):
-        import tests.test_cancel_slots
-        self.assertTrue('tests.test_cancel_slots' in sys.modules, "test_cancel_slots module should be found")
+    def test_unittest_cancel_slot(self):
+        import tests.test_cancel_slot
+        self.assertTrue('tests.test_cancel_slot' in sys.modules, "test_cancel_slot module should be found")
 
 
-    def test_unittest_cancel_slots(self):
-        test_result = run_unittests('tests.test_cancel_slots')
-        self.assertTrue(test_result.wasSuccessful(), "cancel_slots unit tests should succeed")
+    def test_unittest_cancel_slot(self):
+        test_result = run_unittests('tests.test_cancel_slot')
+        self.assertTrue(test_result.wasSuccessful(), "cancel_slot unit tests should succeed")
 
 
     def test_unittest_format_data(self):

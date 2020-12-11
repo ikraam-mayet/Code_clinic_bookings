@@ -105,7 +105,7 @@ def add_data(calendar_events_dict, data_list, booked_slots):
     return data_list, booked_slots
 
 
-def format_summary_description(description, summary):
+def format_summary_description(description, summary): # needs to be tested
     """
     param:
     description - an indvidual event's description (str)

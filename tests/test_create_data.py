@@ -68,5 +68,9 @@ class Test_Create_Data(unittest.TestCase):
     def tests_complete(self):
         os.remove("events.csv")
 
+
+    def test_create_data(self):
+        pass 
+
 if __name__ == "__main__":
     unittest.main()
