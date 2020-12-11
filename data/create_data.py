@@ -9,6 +9,15 @@ data_list = []
 
 
 def store_next_n_days(n, service_obj):
+    """
+    param:
+    n - number of days to store
+    service_obj - the google api service object
+
+    Store all events happening in the next n days
+    for the signed in user in the events.csv file.
+    """
+
     global data_list
 
     booked_slots = dict()
@@ -31,6 +40,15 @@ def store_next_n_days(n, service_obj):
 
 
 def get_clinics_cal(days_to_store, service_obj):
+    """
+    param:
+    days to store - number of days to store
+    service_obj - the google api service object
+
+    Store all events happening in the next 'days_to_store' days
+    for the signed in user in the events.csv file.
+    """
+
     global data_list
 
     booked_slots = dict()
@@ -55,6 +73,17 @@ def get_clinics_cal(days_to_store, service_obj):
 
 
 def add_data(calendar_events_dict, data_list, booked_slots):
+    """
+    param:
+    calendar_events_dict - dictionary containing all events in google format
+    data_list - the list containing all slots for the upcoming days
+    booked_slots - dictionary of all booked slots
+
+    Book a slot for every event in calendar_events_dict.
+    Store every event's details in data_list and 
+    return the updated data_list and booked_slots.
+    """
+    
     # add event data into booked slots and data list
     for event in calendar_events_dict['items']:
         if event['status'] != 'cancelled':
@@ -65,6 +94,7 @@ def add_data(calendar_events_dict, data_list, booked_slots):
             attendees = event['attendees'] if 'attendees' in event else 0
             attendees = len(attendees) if not isinstance(attendees, int) else 0
 
+            description, summary = format_summary_description(description, summary)
             data_list.append([summary, description, start_date, start_time, end_date, end_time, attendees])  # added start iso time for sorting
 
             if start_date in booked_slots:
@@ -75,7 +105,40 @@ def add_data(calendar_events_dict, data_list, booked_slots):
     return data_list, booked_slots
 
 
+def format_summary_description(description, summary):
+    """
+    param:
+    description - an indvidual event's description (str)
+    summary - an individual event's summary (str)
+
+    Format the given description and summary by
+    limiting them to 60 characters and removing any commas.
+    Return the new description and summary.
+    """
+
+    if len(description) > 60:
+        description = description[:61]
+    
+    if len(summary) > 60:
+        summary = summary[:61]
+
+    if ',' not in description and ',' not in summary:
+        return description, summary
+
+    return description.replace(',', ' '), summary.replace(',', ' ')
+
+
 def write_to_csv(header_list, data_list, file_name):
+    """
+    param:
+    header_list - the list containing the csv's headers
+    data_list - a list containing event details for all events
+    file_name - the name of the target csv
+
+    Write all the data in data_list to a csv, with columns
+    determined by header_list.
+    """
+
     # move data from data_list to a csv file
     with open(file_name, 'w', newline='') as csv_file:
         writer_obj = csv.writer(csv_file)
@@ -86,6 +149,17 @@ def write_to_csv(header_list, data_list, file_name):
 
 
 def book_event(service_obj, days, event):
+    """
+    param:
+    service_obj - the google api service object
+    days - the number of days to store
+    event - dictionary containing the event details
+
+    Add the given event to the code clinic calendar,
+    print out the created event's html link,
+    and update the stored data to include the new event.
+    """
+
     made = service_obj.events().insert(calendarId='group2codeclinic@gmail.com', body=event).execute()
     print('Event created: {}'.format(made.get('htmlLink')))
     return store_next_n_days(days, service_obj)
