@@ -33,7 +33,6 @@ def call_date_time_check(days_stored):
         date_ = ask_for_date()
 
         time_ = ask_for_time()
-
         year, month, day = int(date_[2]), datetime.strptime(date_[1], '%B').month, int(date_[0])
         start_date = datetime(year, month, day, hour=int(time_.split(':')[0]), minute=int(time_.split(':')[1]))
         end_date = start_date + timedelta(minutes=30)

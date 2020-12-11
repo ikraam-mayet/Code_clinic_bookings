@@ -31,9 +31,9 @@ class test_making_a_slot(unittest.TestCase):
     @patch('sys.stdin', StringIO(f"{today_}\n08:00\n"))
     def test_call_date_time_check(self): #days_stored needed
         sys.stdout, temp = StringIO(), sys.stdout
-        days_stored = mock_api.Mock_Service().events().list().execute()
+        days_stored = 0
         date_,start_date,end_date = making_a_slot.call_date_time_check(days_stored)
-        self.assertEqual((date_,start_date,end_date),(today_))
+        self.assertEqual((date_,start_date,end_date),(self.today_))
         sys.stdout = temp
 
 
