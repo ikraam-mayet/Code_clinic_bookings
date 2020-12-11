@@ -1,9 +1,8 @@
 import os
-import sys
 import pickle
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
-import google.oauth2.credentials
+
 
 def open_create_credits_file(delete_file=False):
     """
@@ -43,17 +42,24 @@ def open_create_credits_file(delete_file=False):
 
 
 def get_flow():
+    """
+    Return a flow object for the level of permission required by the app.
+    """
+
     # Level of permission we want to request for the application
     scopes = ['https://www.googleapis.com/auth/calendar']
 
-    # ??
     user_home = os.path.expanduser('~')
 
     flow = InstalledAppFlow.from_client_secrets_file(f"{user_home}/Downloads/client_secret.json", scopes=scopes)
     return flow
 
+
 def authenticate_user(credits_file):
-    # Create a service that will interact with the api using the active credentials
+    """
+    Create a service that will interact with the api
+    using the user's active credentials.
+    """
 
     try:
         my_service = build('calendar', 'v3', credentials=credits_file)
