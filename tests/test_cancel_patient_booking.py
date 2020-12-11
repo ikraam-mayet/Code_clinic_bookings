@@ -4,7 +4,7 @@ import datetime
 from io import StringIO
 from tests import mock_api
 from unittest.mock import patch
-from data.patient import cancel_patient_slot_booking
+from data.patient import cancel_patient_booking
 
 class test_cancel_patient_slot_booking(unittest.TestCase):
     
