@@ -44,7 +44,7 @@ class Test_Create_Data(unittest.TestCase):
         second_arg = ['This event totally happened','Empty Description.', self.one_hundred_days_later, '18:00', self.one_hundred_days_later, '19:00',0]
         third_arg = ['UDUDLRLRBA','Empty Description.', self.tomorrow, '08:00', self.tomorrow, '09:00',0]
 
-        self.assertTrue(len(data_list) == 3)
+        self.assertTrue(len(data_list) == 4)
         self.assertTrue(data_list[0] == first_arg)
         self.assertTrue(data_list[1] == second_arg)
         self.assertTrue(data_list[2] == third_arg)
