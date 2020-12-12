@@ -90,7 +90,7 @@ class TestAuthentication(unittest.TestCase):
     def test_authenticate_user_valid_credentials(self):
         with patch('authentication.authenticate.build') as mock_build:
             mock_build.return_value = mock_api.Mock_Service()
-            service_returned = authenticate_user({'Test Number': 1})
+            service_returned = authenticate_user({'Test Number': 1}, test_mode=True)
             self.assertEqual(type(service_returned), type(mock_api.Mock_Service()))
 
     @patch('authentication.authenticate.build')
@@ -105,7 +105,7 @@ class TestAuthentication(unittest.TestCase):
         with patch('authentication.authenticate.open_create_credits_file') as mock_OCF:
             mock_OCF.return_value = mock_api.Flow().run_local_server()
             mock_build.side_effect = [TypeError, mock_api.Mock_Service()]
-            service_returned = authenticate_user({'Test Number': 4, 'Test Number': 5})
+            service_returned = authenticate_user({'Test Number': 4, 'Test Number': 5}, test_mode=True)
             self.assertEqual(type(service_returned), type(mock_api.Mock_Service()))
         sys.stdout = temp
 

@@ -26,11 +26,11 @@ def store_days():
     while True:
         try:
             days_to_store = int(input("Please enter an integer for the number of days to store. \n0 will store today only, negative integers will store nothing: "))
+            days_to_store = days_to_store if days_to_store < 15 else 15
+            return days_to_store
         except ValueError:
             print("\nInteger was not entered correctly.\nTry again.\n")
             continue
-
-        else: return days_to_store
 
 
 def delete_events(src_file):
@@ -131,7 +131,7 @@ def authentication():
     """
     credits_file = authenticate.open_create_credits_file()
     service_obj = authenticate.authenticate_user(credits_file)
-    
+
     return service_obj
 
 
@@ -149,7 +149,7 @@ def patient_cancellation():
 
     service_obj = authentication()
     booked_slots = create_data.store_next_n_days(int(days_to_store), service_obj)
-    cancel_patient_booking.patient_book_slot(service_obj, booked_slots)
+    cancel_patient_booking.patient_cancel_slot(service_obj, booked_slots)
 
     delete_events('events.csv')
 
@@ -169,6 +169,7 @@ def volunteer_cancellation():
     print(user_viewing_of_calendar('events.csv'))
     print(cancel_slot.calling_of_cancelations_function(service_obj, booked_slots,service_obj))
     booked_slots = create_data.store_next_n_days(int(days_to_store), service_obj)
+    delete_events('events.csv')
     print(user_viewing_of_calendar('events.csv'))
     
 

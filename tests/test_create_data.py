@@ -17,7 +17,7 @@ class Test_Create_Data(unittest.TestCase):
 
     def test_store_next_n_days_return_today(self):
         # with patch('data.create_data.add_data') as mock_create_data
-        slots_booked = store_next_n_days(0, mock_api.Mock_Service())
+        slots_booked = store_next_n_days(0, mock_api.Mock_Service(), test_mode=True)
 
         self.assertTrue(self.today in slots_booked)
         self.assertEqual(time(hour=8), slots_booked[self.today][0][0])
@@ -27,7 +27,7 @@ class Test_Create_Data(unittest.TestCase):
         self.assertTrue(self.one_hundred_days_later not in slots_booked)
 
     def test_store_next_n_days_return_two_days(self):
-        slots_booked = store_next_n_days(1, mock_api.Mock_Service())
+        slots_booked = store_next_n_days(1, mock_api.Mock_Service(), test_mode=True)
 
         self.assertTrue(self.today in slots_booked)
         self.assertTrue(self.tomorrow in slots_booked)

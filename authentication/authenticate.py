@@ -2,6 +2,7 @@ import os
 import pickle
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
+from oauthlib.oauth2.rfc6749.errors import AccessDeniedError
 
 
 def open_create_credits_file(delete_file=False):
@@ -21,23 +22,31 @@ def open_create_credits_file(delete_file=False):
         credits_file = open(f"{user_home}/.credentials.pkl", "rb")
         if os.path.getsize(f"{user_home}/.credentials.pkl") == 0:
             credits_file.close()
-            raise FileNotFoundError # if file is empty force an exception to be raised
+            raise FileNotFoundError  # if file is empty force an exception to be raised
         active_credits = pickle.load(credits_file)
         credits_file.close()
         return active_credits
     except FileNotFoundError:
         # Should the file be missing, create new credentials
         try:
-            print('File missing/empty.\nCreating new credentials...')
+            print('File missing\\empty.\nCreating new credentials...')
             credits_file = open(f"{user_home}/.credentials.pkl", "wb")
-            active_credits = get_flow().run_local_server(authorization_prompt_message='Please authenticate the app. Opening browser...')
+            new_flow = get_flow()
+            active_credits = new_flow.run_local_server(authorization_prompt_message='Please authenticate the app. Opening browser...')
             pickle.dump(active_credits, credits_file)
-            credits_file.close()
+            credits_file.close()            
             return active_credits
-        # Assume user denied access if the previous try block failed. Exit the app.
-        except:
+        # User does not have the credits file in the right location. Exit the app.
+        except FileNotFoundError:
+            exit()
+        # User denied access if error is raised. Exit the app.
+        except AccessDeniedError:
+            print("Authentication failed. Please give the app permission to your calendar.")
+            exit()
+        # Process is still running. Ask user to wait and exit the app.
+        except OSError:
             credits_file.close()
-            print('Authentication failed.\nPlease check if their is a client_secret.json file in the home directory.\nPlease give the app permission to your calendar or try again in 5 minutes.')
+            print('Authentication failed. Please try again in 2 minutes.')
             exit()
 
 
@@ -51,11 +60,15 @@ def get_flow():
 
     user_home = os.path.expanduser('~')
 
+    if not os.path.isfile(f"{user_home}/Downloads/client_secret.json"):
+        print("Please check if there is a client_secret.json file in the downloads directory.")
+        raise FileNotFoundError
+
     flow = InstalledAppFlow.from_client_secrets_file(f"{user_home}/Downloads/client_secret.json", scopes=scopes)
     return flow
 
 
-def authenticate_user(credits_file):
+def authenticate_user(credits_file, test_mode=False):
     """
     Create a service that will interact with the api
     using the user's active credentials.
@@ -63,11 +76,13 @@ def authenticate_user(credits_file):
 
     try:
         my_service = build('calendar', 'v3', credentials=credits_file)
+        print("Signed in.")
         return my_service
     except:
         print("Invalid credentials. Creating new ones...")
         credits_file = open_create_credits_file(delete_file=True)
         my_service = build('calendar', 'v3', credentials=credits_file)
+        print("Signed in.")
         return my_service
     raise TypeError("Credits file should be a Google OAuth2 Credentials object.")
     exit()

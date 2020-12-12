@@ -1,15 +1,10 @@
 import datetime
-from data.patient import patient_slot_booking
+from data import event_search
 
-def calling_of_cancelations_function(service_object, user_booked_slots,service_obj):
 
-    desired_event = input("Input an event name that you would like to book (case sensitive): ")
+def calling_of_cancelations_function(service_object, user_booked_slots, service_obj):
 
-    matches = patient_slot_booking.get_matching_events(service_object, desired_event)
-
-    desired_date, start = get_date_time(user_booked_slots)
-
-    final_event = get_final_event(matches, start, desired_date)
+    final_event = event_search.search_for_event(service_object, user_booked_slots, compare_slots, which_calendar='primary')
     event_id = final_event['id']
 
     if len(final_event['attendees']) == 1:
@@ -43,7 +38,6 @@ def compare_slots(day, start, end):
     for slot in day:
         if start >= slot[0] and start < slot[1]:
             return True
-        
 
 
 def volunteer_cancel_slot(service_obj, event_id):

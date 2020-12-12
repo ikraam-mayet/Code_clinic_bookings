@@ -4,11 +4,12 @@ from datetime import date, timedelta
 from data.format_data import *
 import data.display_calendar as display_calender
 import googleapiclient.errors as errors
+from googleapiclient.discovery import Resource
 
 data_list = []
 
 
-def store_next_n_days(n, service_obj):
+def store_next_n_days(n, service_obj, test_mode=False):
     """
     param:
     n - number of days to store
@@ -19,6 +20,14 @@ def store_next_n_days(n, service_obj):
     """
 
     global data_list
+
+    try:
+        int(n)
+    except ValueError:
+        raise ValueError("n should be an integer.")
+
+    if type(service_obj) is not Resource and test_mode is False:
+        raise ValueError("Service Object should be a google api resource.")
 
     booked_slots = dict()
 
@@ -39,7 +48,7 @@ def store_next_n_days(n, service_obj):
     return booked_slots
 
 
-def get_clinics_cal(days_to_store, service_obj):
+def get_clinics_cal(days_to_store, service_obj, test_mode=False):
     """
     param:
     days to store - number of days to store
@@ -50,6 +59,14 @@ def get_clinics_cal(days_to_store, service_obj):
     """
 
     global data_list
+
+    try:
+        int(days_to_store)
+    except ValueError:
+        raise ValueError("days_to_store should be an integer.")
+
+    if type(service_obj) is not Resource and test_mode is False:
+        raise ValueError("Service Object should be a google api resource.")
 
     booked_slots = dict()
 
@@ -64,7 +81,7 @@ def get_clinics_cal(days_to_store, service_obj):
     try:
         calend = service_obj.events().list(calendarId='group2codeclinic@gmail.com', timeMin=current_date, timeMax=end_date, singleEvents=True, orderBy='startTime').execute()
     except errors.HttpError:
-        print("User not connected to the clinic calendar")
+        print("User account not connected to the clinic calendar.")
         exit()
     data_list, booked_slots = add_data(calend, data_list, booked_slots)
     write_to_csv(header_list, data_list, 'calendar_events.csv')
@@ -83,7 +100,15 @@ def add_data(calendar_events_dict, data_list, booked_slots):
     Store every event's details in data_list and 
     return the updated data_list and booked_slots.
     """
+    if type(calendar_events_dict) is not dict:
+        raise ValueError("Calendar events should be in a dictionary.")
     
+    if type(data_list) is not list:
+        raise ValueError("Data list should be a list.")
+
+    if type(booked_slots) is not dict:
+        raise ValueError("Booked slots should be in a dictionary.")
+
     # add event data into booked slots and data list
     for event in calendar_events_dict['items']:
         if event['status'] != 'cancelled':
@@ -116,6 +141,9 @@ def format_summary_description(description, summary): # needs to be tested
     Return the new description and summary.
     """
 
+    if type(description) is not str or type(summary) is not str:
+        raise ValueError("Description and summary should be strings.")
+
     if len(description) > 60:
         description = description[:61]
     
@@ -138,6 +166,14 @@ def write_to_csv(header_list, data_list, file_name):
     Write all the data in data_list to a csv, with columns
     determined by header_list.
     """
+    if type(header_list) is not list:
+        raise ValueError("Header list should be a list.")
+
+    if type(data_list) is not list:
+        raise ValueError("Data list should be a list.")
+    
+    if type(file_name) is not str:
+        raise ValueError("File name should be a string.")
 
     # move data from data_list to a csv file
     with open(file_name, 'w', newline='') as csv_file:
@@ -148,7 +184,7 @@ def write_to_csv(header_list, data_list, file_name):
             writer_obj.writerow(row)
 
 
-def book_event(service_obj, days, event):
+def book_event(service_obj, days, event, test_mode=False):
     """
     param:
     service_obj - the google api service object
@@ -159,6 +195,17 @@ def book_event(service_obj, days, event):
     print out the created event's html link,
     and update the stored data to include the new event.
     """
+
+    try:
+        int(days)
+    except ValueError:
+        raise ValueError("Days should be an integer.")
+
+    if type(service_obj) is not Resource and test_mode is False:
+        raise ValueError("Service Object should be a google api resource.")
+
+    if 'end' not in event or 'start' not in event:
+        raise ValueError("New event should have a start and end time defined.")
 
     made = service_obj.events().insert(calendarId='group2codeclinic@gmail.com', body=event).execute()
     print('Event created: {}'.format(made.get('htmlLink')))
