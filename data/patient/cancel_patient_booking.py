@@ -5,16 +5,13 @@ def patient_cancel_slot(service_object, user_booked_slots):
 
     final_event = event_search.search_for_event(service_object, user_booked_slots, compare_slots)
 
-    try:
-        student = final_event['attendees'][0]['email']
-        test_one = service_object.events().list(calendarId=student).execute()
-        test_two = service_object.events().list(calendarId='primary').execute()
+    student = final_event['attendees'][1]['email']
+    test_one = service_object.events().list(calendarId=student).execute()['etag']
+    test_two = service_object.events().list(calendarId='primary').execute()['etag']
 
-        if test_one != test_two:
-            raise ValueError
-    except:
+    if test_one != test_two:
         print("You are not allowed to delete that event.")
-        return patient_cancel_slot(service_object, final_event)
+        return patient_cancel_slot(service_object, user_booked_slots)
 
     remove_att = final_event['attendees']
     del final_event['attendees']

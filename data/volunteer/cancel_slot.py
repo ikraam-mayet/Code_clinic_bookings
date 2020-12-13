@@ -4,7 +4,7 @@ from data import event_search
 
 def calling_of_cancelations_function(service_object, user_booked_slots, service_obj):
 
-    final_event = event_search.search_for_event(service_object, user_booked_slots, compare_slots, which_calendar='primary')
+    final_event = event_search.search_for_event(service_object, user_booked_slots, compare_slots)
     event_id = final_event['id']
 
     if len(final_event['attendees']) == 1:

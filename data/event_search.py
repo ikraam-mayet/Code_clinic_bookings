@@ -9,8 +9,8 @@ def search_for_event(service_object, user_booked_slots, compare_slots, which_cal
     calendar = which_calendar
     while True:
         try:
-            print("Enter exit/quit/close at any point to quit.")
-            desired_event = input("Please enter the event name: ")
+            print("\nEnter exit/quit/close at any point to quit.")
+            desired_event = input("\nPlease enter the event name: ")
 
             if desired_event.lower().strip() in ['exit', 'quit', 'close']:
                 exit()
@@ -49,7 +49,7 @@ def get_final_event(matches, start, date):
 
 
 def get_matching_events(service_object, desired_event):
-    calendar_events = service_object.events().list(calendarId=calendar).execute()
+    calendar_events = service_object.events().list(calendarId='group2codeclinic@gmail.com').execute()
     matches = list()
 
     if 'items' not in calendar_events:
@@ -67,7 +67,7 @@ def get_matching_events(service_object, desired_event):
 
 
 def get_date_time(user_booked_slots, compare_slots):
-    desired_date = input("Please enter the date of the event (i.e 23 December 2020): ").strip()
+    desired_date = input("\nPlease enter the date of the event (i.e 23 December 2020): ").strip()
     start_time_str = input("Please enter the start time of the slot (i.e 10:00): ").strip()
 
     if desired_date.lower() in ['exit', 'quit', 'close']:

@@ -5,6 +5,10 @@ def patient_book_slot(service_object, user_booked_slots):
 
     final_event = event_search.search_for_event(service_object, user_booked_slots, compare_slots)
     final_event = generate_new_guest_summary(service_object, final_event)
+    
+    while final_event is None:
+        final_event = patient_book_slot(service_object, user_booked_slots)
+
     patched_event = {'summary': final_event['summary'],
                         'attendees': final_event['attendees']}
 
@@ -23,13 +27,13 @@ def generate_new_guest_summary(service_object, final_event):
         exit()
 
     try:
-        test_one = service_object.events().list(calendarId=student_email).execute()
-        test_two = service_object.events().list(calendarId='primary').execute()
+        test_one = service_object.events().list(calendarId=student_email).execute()['etag']
+        test_two = service_object.events().list(calendarId='primary').execute()['etag']
 
         if test_one != test_two:
+            print("Please enter YOUR username.")
             raise ValueError
     except:
-        print("Please enter YOUR username.")
         return generate_new_guest_summary(service_object, final_event)
 
     try:
@@ -44,7 +48,7 @@ def generate_new_guest_summary(service_object, final_event):
         final_event['attendees'] = [new_guest, cal]  # add both the user and calendar as guests if it has no guests (which it will always have)
     else:
         print("Slot fully booked.")
-        raise ValueError
+        return None
     return final_event
 
 

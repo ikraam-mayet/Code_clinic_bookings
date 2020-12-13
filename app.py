@@ -151,8 +151,6 @@ def patient_cancellation():
     booked_slots = create_data.store_next_n_days(int(days_to_store), service_obj)
     cancel_patient_booking.patient_cancel_slot(service_obj, booked_slots)
 
-    delete_events('events.csv')
-
 
 def volunteer_cancellation():
     """  
