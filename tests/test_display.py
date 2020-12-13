@@ -33,3 +33,9 @@ class test_display_calendar(unittest.TestCase):
 ├──────────────┼───────────────┼──────────────┼──────────────┼────────────┼────────────┤
 │ foo          │ 2             │ 5            │ bar          │ e          │ z          │
 ╘══════════════╧═══════════════╧══════════════╧══════════════╧════════════╧════════════╛""")
+
+
+    def test_remove_attendees(self):
+        data_list = [['Event name', 'Description', 'Start Date', 'Start Time', 'End Date', 'End Time','attendees'],['Event name', 'Description', 'Start Date', 'Start Time', 'End Date', 'End Time','attendees']]
+        result = display_calendar.remove_attendees(data_list)
+        self.assertEqual(result, [['Event name', 'Description', 'Start Date', 'Start Time', 'End Date', 'End Time'],['Event name', 'Description', 'Start Date', 'Start Time', 'End Date', 'End Time']])

@@ -8,16 +8,16 @@ from data.volunteer import cancel_slot
 
 class test_cancel_slot(unittest.TestCase):
 
-    def test_calling_of_cancelations(self):
+    def test_calling_of_cancelations_funtion(self):
         pass
 
 
-    def test_get_final_events(self):
+    def test_get_final_event(self):
         pass
 
 
     def test_compare_slots(self):
         pass
 
-    def test_volunteer_cancel_slots(self):
+    def test_volunteer_cancel_slot(self):
         pass

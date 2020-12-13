@@ -19,9 +19,8 @@ def remove_attendees(data_list):
         """  
         Removes attendees from the list.
         """
-        for i in range (len(data_list) - 1):
-                data_list[i].pop(6) 
-
+        for i in range (len(data_list)):
+                data_list[i] = data_list[i][:-1]
         return data_list
 
 

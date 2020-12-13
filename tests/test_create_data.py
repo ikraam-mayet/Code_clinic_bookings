@@ -4,6 +4,7 @@ from datetime import date, time, timedelta
 import tests.mock_api as mock_api
 from data.create_data import *
 from unittest.mock import patch
+import sys
 
 
 class Test_Create_Data(unittest.TestCase):
@@ -12,8 +13,6 @@ class Test_Create_Data(unittest.TestCase):
     tomorrow = (date.today() + timedelta(days=1)).strftime("%d %B %Y")
     one_hundred_days_later = (date.today() + timedelta(days=100)).strftime('%d %B %Y')
     
-    def test_show_events(self):
-        pass
 
     def test_store_next_n_days_return_today(self):
         # with patch('data.create_data.add_data') as mock_create_data
@@ -67,6 +66,7 @@ class Test_Create_Data(unittest.TestCase):
 
     def tests_complete(self):
         os.remove("events.csv")
+        self.assertTrue('events.csv' not in sys.modules, "events module should not be found")
 
 if __name__ == "__main__":
     unittest.main()
