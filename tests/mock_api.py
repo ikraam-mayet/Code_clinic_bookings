@@ -118,7 +118,7 @@ class Mock_Events:
         'id': '0mlugf7j95b8_20201116T956841Z', 'status': 'confirmed',
         'htmlLink': 'https://www.test.co.za/calendar/event?eid=wEStilLDontExist',
         'created': '2020-10-24T09:01:58.000Z', 'updated': '2020-10-24T09:03:27.846Z',
-        'summary': 'Maybe I found the easter egg', 'creator': {'email': 'tryharders@wannabees.wedonotthinkcodesincewedontexist.co.za', 'self': True},
+        'summary': 'Easteregg // found', 'creator': {'email': 'tryharders@wannabees.wedonotthinkcodesincewedontexist.co.za', 'self': True},
         'organizer': {'email': 'tryharders@wannabees.wedonotthinkcodesincewedontexist.co.za', 'self': True},
         'start': {'dateTime': datetime.date.today().strftime("%Y-%m-%dT08:00:00"), 'timeZone': 'Africa/Johannesburg'},
         'end': {'dateTime': datetime.date.today().strftime("%Y-%m-%dT09:00:00"), 'timeZone': 'Africa/Johannesburg'},
