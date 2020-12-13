@@ -107,5 +107,15 @@ class test_acceptance(unittest.TestCase):
         self.assertTrue(test_result.wasSuccessful(), "making_a_slot unit tests should succeed")
 
 
+    def test_unittest_event_search(self):
+        import tests.test_event_search
+        self.assertTrue('tests.test_event_search' in sys.modules, "test_event_search module should be found")
+
+
+    def test_unittest_event_search(self):
+        test_result = run_unittests('tests.test_event_search')
+        self.assertTrue(test_result.wasSuccessful(), "event_search unit tests should succeed")
+
+
 if __name__ == '__main__':
     unittest.main()
