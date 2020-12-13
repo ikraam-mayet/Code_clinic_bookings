@@ -19,7 +19,7 @@ class test_cancel_patient_booking(unittest.TestCase):
     @patch('sys.stdin', StringIO(f"Easteregg // found\n{today_}\n08:00\n"))
     def test_patient_cancel_slot(self):
         sys.stdout, temp = StringIO(), sys.stdout
-
+        self.maxDiff = None
         event_four = {'kind': 'test#event', 'etag': '"try-hard-101"',
         'id': '0mlugf7j95b8_20201116T956841Z', 'status': 'confirmed',
         'htmlLink': 'https://www.test.co.za/calendar/event?eid=wEStilLDontExist',
@@ -41,8 +41,8 @@ class test_cancel_patient_booking(unittest.TestCase):
         'created': '2020-10-24T09:01:58.000Z', 'updated': '2020-10-24T09:03:27.846Z',
         'summary': 'Easteregg', 'creator': {'email': 'tryharders@wannabees.wedonotthinkcodesincewedontexist.co.za',
         'self': True}, 'organizer': {'email': 'tryharders@wannabees.wedonotthinkcodesincewedontexist.co.za', 'self': True},
-        'start': {'dateTime': '2020-12-13T08:00:00', 'timeZone': 'Africa/Johannesburg'},
-        'end': {'dateTime': '2020-12-13T09:00:00', 'timeZone': 'Africa/Johannesburg'},
+        'start': {'dateTime': datetime.date.today().strftime("%Y-%m-%dT08:00:00"), 'timeZone': 'Africa/Johannesburg'},
+        'end': {'dateTime': datetime.date.today().strftime("%Y-%m-%dT09:00:00"), 'timeZone': 'Africa/Johannesburg'},
         'attendees': [{'email': 'send@help.co.za'}], 'recurringEventId': '0mlugf7j95b8_20201116T060000Z',
         'originalStartTime': {'dateTime': '2020-11-16T08:00:00+02:00', 'timeZone': 'Africa/Johannesburg'},
         'iCalUID': '0mlugf7j95b8_20201116T060000Z@google.com', 'sequence': 0,

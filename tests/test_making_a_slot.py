@@ -43,8 +43,91 @@ class test_making_a_slot(unittest.TestCase):
         sys.stdout = temp
 
 
-    @patch('sys.stdin', StringIO(f"{today_}\n11:30\n"))
-    def test_check_available_slots(self): #booked_slots, days_stored needed
-        sys.stdout, temp = StringIO(), sys.stdout
-        # result = making_a_slot.check_available_slots()
-        sys.stdout = temp
+    def test_create_event(self):
+
+        answer = self.today_.split(" ")
+        year, month, day = int(answer[2]), datetime.datetime.strptime(answer[1], '%B').month, int(answer[0])
+        start_date = datetime.datetime(year, month, day, hour=int(self.time_.split(':')[0]), minute=int(self.time_.split(':')[1]))
+        end_date = start_date + datetime.timedelta(minutes=30)
+        summary = 'imayet'
+        student_email  = summary + '@student.wethinkcode.co.za'
+        description = 'everything'
+
+        result = making_a_slot.create_event(start_date,end_date,summary,description,student_email)
+
+        answer = {
+            'summary': summary,
+            'description': description,
+            'start': {
+                'dateTime': start_date.strftime('%Y-%m-%dT%H:%M:%S'),
+                'timeZone': 'Africa/Johannesburg',
+                },
+            'end': {
+                'dateTime': end_date.strftime('%Y-%m-%dT%H:%M:%S'),
+                'timeZone': 'Africa/Johannesburg',
+                },
+            'attendees': [
+                    {'email' : student_email}
+            ],
+            'params' : {
+                'sendNotifications' : True
+                },
+            'reminders': {
+                'useDefault': False,
+                'overrides' : [
+                    {'method':'email', 'minutes':60},
+                    {'method': 'popup', 'minutes':10}
+                ]
+            }
+        }
+
+        self.assertEqual(result,answer)
+
+
+    @patch('sys.stdin', StringIO(f"imayet\neverything"))
+    def test_volunteer(self):
+
+        answer = self.today_.split(" ")
+        year, month, day = int(answer[2]), datetime.datetime.strptime(answer[1], '%B').month, int(answer[0])
+        start_date = datetime.datetime(year, month, day, hour=int(self.time_.split(':')[0]), minute=int(self.time_.split(':')[1]))
+        end_date = start_date + datetime.timedelta(minutes=30)
+        summary = 'imayet'
+        student_email  = summary + '@student.wethinkcode.co.za'
+        description = 'everything'
+
+        result = making_a_slot.volunteer(start_date)
+        self.maxDiff = None
+        event_slots = list()
+
+        for i in range(3):
+            end_date = start_date + datetime.timedelta(minutes=30)
+            events = {
+        'summary': summary,
+        'description': description,
+        'start': {
+            'dateTime': start_date.strftime('%Y-%m-%dT%H:%M:%S'),
+            'timeZone': 'Africa/Johannesburg',
+            },
+        'end': {
+            'dateTime': end_date.strftime('%Y-%m-%dT%H:%M:%S'),
+            'timeZone': 'Africa/Johannesburg',
+            },
+        'attendees': [
+                {'email' : student_email}
+        ],
+        'params' : {
+            'sendNotifications' : True
+            },
+        'reminders': {
+            'useDefault': False,
+            'overrides' : [
+                {'method':'email', 'minutes':60},
+                {'method': 'popup', 'minutes':10}
+            ]
+        }
+    }
+            event_slots.append(events)
+            start_date = end_date
+
+
+        self.assertEqual(result,event_slots)
