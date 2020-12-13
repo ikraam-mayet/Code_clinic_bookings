@@ -96,7 +96,7 @@ def patient_booking():
     booked_slots = create_data.store_next_n_days(int(days_to_store), service_obj)
     delete_events('events.csv')
 
-    patient_slot_booking.patient_book_slot(service_obj, booked_slots)
+    return patient_slot_booking.patient_book_slot(service_obj, booked_slots)
 
 
 def volunteer():
@@ -131,7 +131,6 @@ def authentication():
     """
     credits_file = authenticate.open_create_credits_file()
     service_obj = authenticate.authenticate_user(credits_file)
-
     return service_obj
 
 
@@ -179,10 +178,10 @@ def delete():
     try:
         user_home = os.path.expanduser('~')
         os.remove(f"{user_home}/.credentials.pkl")
-        print('Credentials file deleted')
+        return ('Credentials file deleted')
 
     except FileNotFoundError:
-        print('Credentials file deleted')
+        return ('Credentials file deleted')
 
 
 def help_func():
@@ -258,7 +257,7 @@ def main_function():
         patient_cancellation()
 
     elif sys.argv[1] == 'delete':
-        delete()
+        print(delete())
 
     else:
         print(help_func())
