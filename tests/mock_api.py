@@ -70,6 +70,8 @@ class Mock_Events:
                     continue
         return Fake_Execute_Obj(chosen_one)
 
+    def update(self, calendarId='nix', body=None, eventId='0', sendUpdates='none'):
+        return self.patch(calendarId, body, eventId, sendUpdates)
 
     def fake_events(self):
         event_one = {'kind': 'test#event', 'etag': '"678-999-8212"',
