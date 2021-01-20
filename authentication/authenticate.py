@@ -76,7 +76,7 @@ def authenticate_user(credits_file, test_mode=False):
 
     try:
         my_service = build('calendar', 'v3', credentials=credits_file)
-        print("Signed in.")
+        print("Signed in!")
         return my_service
     except:
         print("Invalid credentials. Creating new ones...")
